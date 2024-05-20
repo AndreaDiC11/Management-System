@@ -44,6 +44,13 @@
                             <a th:href="'Contenuti?folderId=' + ${subfolder.getId()}">
                                 <span th:text="${subfolder.getName()}"></span>
                             </a>
+                            <!-- Bottone per aggiungere una sottocartella -->
+		                    <button type="button" class="add-subfolder-btn" th:data-folder-id="${subfolder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+		                    <!-- Campo di input per il nome della nuova sottocartella -->
+		                    <div class="subfolder-input" style="display:none;">
+		                        <input type="text" placeholder="Nome sottocartella">
+		                        <button type="button" class="save-subfolder-btn">Salva</button>
+		                    </div>
                         </li>
                     </ul>
                 </div>

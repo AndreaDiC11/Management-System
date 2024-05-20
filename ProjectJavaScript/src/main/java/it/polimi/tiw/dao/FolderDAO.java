@@ -69,9 +69,9 @@ public class FolderDAO {
         }
     }
     
-    public void addSubfolder(String creator, String parentFolderName, String newFolderName) throws SQLException {
+    public void addSubfolder(String creator, int parentId, String newFolderName) throws SQLException {
         // Ottieni l'id della cartella genitore
-        Folder parent = findTopFolder(creator, parentFolderName);
+        Folder parent = findFolderById(parentId);
         if (parent == null) {
             throw new SQLException("La cartella genitore non esiste");
         }
@@ -83,7 +83,7 @@ public class FolderDAO {
         String query = "INSERT INTO folders (name, parent_id, creator) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, newFolderName);
-            statement.setInt(2, parent.getId());
+            statement.setInt(2, parentId);
             statement.setString(3, creator); // Imposta il creator come necessario
 
             statement.executeUpdate();

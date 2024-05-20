@@ -39,26 +39,40 @@ public class CreaSottoCartella extends HttpServlet {
             return;
         }
 
-        // Recupera l'utente dalla sessione
         User user = (User) session.getAttribute("user");
-        String parentFolder = StringEscapeUtils.escapeJava(request.getParameter("parentFolder"));
+        int parentId = Integer.parseInt(request.getParameter("parentId"));
         String nomeSottoCartella = StringEscapeUtils.escapeJava(request.getParameter("folderName"));
+        String parentFolder = null;
+        
+        FolderDAO folderDao = new FolderDAO(connection);
 
-        if (nomeSottoCartella == null || nomeSottoCartella.isEmpty() || parentFolder == null || parentFolder.isEmpty()) {
+        
+        try { 
+        	parentFolder = folderDao.findFolderById(parentId).getName();
+            if (nomeSottoCartella.isEmpty() || parentFolder.isEmpty()) {
+                throw new Exception("Nome della sottocartella o cartella genitore mancante.");
+            }
+        } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("Errore: Parametri mancanti");
+            response.getWriter().write("Errore: " + e.getMessage());
             return;
         }
 
-        FolderDAO folderDao = new FolderDAO(connection);
 
         try {
-            folderDao.addSubfolder(user.getUsername(), parentFolder, nomeSottoCartella);
-            response.setContentType("application/json");
-            response.getWriter().println("{\"success\": true}");
+            folderDao.addSubfolder(user.getUsername(), parentId, nomeSottoCartella);
+            response.setStatus(HttpServletResponse.SC_OK);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Errore: " + e.getMessage());
+            response.getWriter().write("Errore: " + e.getMessage());
+        }
+    }
+
+    public void destroy() {
+        try {
+            ConnectionHandler.closeConnection(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
