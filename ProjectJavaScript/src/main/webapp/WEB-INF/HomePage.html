@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>HOME PAGE</title>
+    <!-- Stili CSS per l'albero -->
+    <link rel="stylesheet" href="css/homepage_style.css">
+    <script src="js/homepage.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        <!-- Link per effettuare il logout -->
+        <a th:href="'Logout'">Logout</a>
+    </div>
+    <div id="tree">
+        <ul>
+            <!-- Iterazione sulle cartelle -->
+            <li th:each="folder : ${folders}">
+                <div th:if="${#lists.isEmpty(folder.getFolders())}">
+                    <!-- Se non ci sono sottocartelle, mostra un link per visualizzare i documenti -->
+                    <a th:href="'Contenuti?folderId=' + ${folder.getId()}" th:text="${folder.getName()}"></a>
+                    <!-- Bottone per aggiungere una sottocartella -->
+                    <button type="button" class="add-subfolder-btn" th:data-folder-id="${folder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                    <!-- Campo di input per il nome della nuova sottocartella -->
+                    <div class="subfolder-input" style="display:none;">
+                        <input type="text" placeholder="Nome sottocartella">
+                        <button type="button" class="save-subfolder-btn">Salva</button>
+                    </div>
+                </div>
+                <div th:unless="${#lists.isEmpty(folder.getFolders())}">
+                    <!-- Mostra il nome della cartella -->
+                    <span th:text="${folder.getName()}"></span>
+                    <!-- Bottone per aggiungere una sottocartella -->
+                    <button type="button" class="add-subfolder-btn" th:data-folder-id="${folder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                    <!-- Campo di input per il nome della nuova sottocartella -->
+                    <div class="subfolder-input" style="display:none;">
+                        <input type="text" placeholder="Nome sottocartella">
+                        <button type="button" class="save-subfolder-btn">Salva</button>
+                    </div>
+                    <!-- Iterazione sulle sotto-cartelle -->
+                    <ul>
+                        <li th:each="subfolder : ${folder.getFolders()}">
+                            <!-- Mostra i nomi delle sotto-cartelle con link -->
+                            <a th:href="'Contenuti?folderId=' + ${subfolder.getId()}">
+                                <span th:text="${subfolder.getName()}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

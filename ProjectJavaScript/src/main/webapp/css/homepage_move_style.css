@@ -1,0 +1,56 @@
+@charset "UTF-8";
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: right;
+}
+
+#tree {
+    margin: 20px;
+}
+
+#tree ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+#tree ul li {
+    margin-bottom: 10px;
+}
+
+#tree ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+#tree ul li a:hover {
+    color: #0056b3;
+}
+
+#tree ul li span {
+    font-weight: bold;
+}
+
+#tree ul ul {
+    margin-top: 5px;
+}
+
+#tree ul ul li {
+    margin-bottom: 5px;
+    padding-left: 20px;
+}
+
+#tree ul ul li a {
+    font-style: italic;
+}
+
+.highlight {
+    background-color: yellow;
+}

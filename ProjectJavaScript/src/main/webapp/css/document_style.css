@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+/* Stile per il contenitore principale */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Stile per il titolo */
+h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Stile per le informazioni del documento */
+.document-info {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* Stile per il nome del documento */
+.document-info p strong {
+    font-weight: bold;
+}
+
+/* Stile per il testo delle informazioni */
+.document-info p span {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Stile per separare le informazioni */
+.document-info p {
+    margin-bottom: 10px;
+}
