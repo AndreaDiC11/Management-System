@@ -37,6 +37,12 @@
                         <textarea placeholder="Sommario documento"></textarea>
                         <button type="button" class="save-document-btn">Salva</button>
                     </div>
+                    <!-- Iterazione sui documenti della cartella -->
+	                <ul th:if="${!#lists.isEmpty(folder.getDocuments())}">
+	                    <li th:each="document : ${folder.getDocuments()}">
+	                        <span th:text="${document.getName()}"></span>
+	                    </li>
+	                </ul>
                 </div>
                 <div th:unless="${#lists.isEmpty(folder.getFolders())}">
                     <!-- Mostra il nome della cartella -->
@@ -60,12 +66,30 @@
                             <!-- Contenitore per i pulsanti e i form -->
                             <div class="action-buttons">
                                 <button type="button" class="add-subfolder-btn" th:data-folder-id="${subfolder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                                <div th:if="${#lists.isEmpty(subfolder.getFolders())}">    
+                                	<button type="button" class="add-document-btn" th:data-folder-id="${subfolder.getId()}">AGGIUNGI DOCUMENTO</button>
+                                </div>
                             </div>
                             <!-- Campo di input per il nome della nuova sottocartella -->
                             <div class="subfolder-input" style="display:none;">
                                 <input type="text" placeholder="Nome sottocartella">
                                 <button type="button" class="save-subfolder-btn">Salva</button>
                             </div>
+                            <!-- Campi di input per il nuovo documento -->
+                            <div class="document-input" style="display:none;">
+                                <input type="text" placeholder="Nome documento">
+                                <input type="date" placeholder="Data documento">
+                                <input type="text" placeholder="Tipo documento">
+                                <textarea placeholder="Sommario documento"></textarea>
+                                <button type="button" class="save-document-btn">Salva</button>
+                            </div>
+                            <!-- Iterazione sui documenti della cartella -->
+			                <ul th:if="${!#lists.isEmpty(subfolder.getDocuments())}">
+			                    <li th:each="document : ${subfolder.getDocuments()}">
+			                        <span th:text="${document.getName()}"></span>
+			                    </li>
+			                </ul>
+                            
                             <!-- Chiamata ricorsiva per le sottocartelle annidate -->
                             <ul th:if="${!#lists.isEmpty(subfolder.getFolders())}">
                                 <li th:each="nestedFolder : ${subfolder.getFolders()}" th:include="this :: folderFragment"></li>
@@ -99,6 +123,12 @@
                 <textarea placeholder="Sommario documento"></textarea>
                 <button type="button" class="save-document-btn">Salva</button>
             </div>
+            <!-- Iterazione sui documenti della cartella -->
+            <ul th:if="${!#lists.isEmpty(nestedFolder.getDocuments())}">
+                <li th:each="document : ${nestedFolder.getDocuments()}">
+                    <span th:text="${document.getName()}"></span>
+                </li>
+            </ul>
         </div>
         <div th:unless="${#lists.isEmpty(nestedFolder.getFolders())}">
             <!-- Mostra il nome della cartella -->
@@ -106,6 +136,9 @@
             <!-- Contenitore per i pulsanti e i form -->
             <div class="action-buttons">
                 <button type="button" class="add-subfolder-btn" th:data-folder-id="${nestedFolder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                <div th:if="${#lists.isEmpty(nestedFolder.getFolders())}">    
+                	<button type="button" class="add-document-btn" th:data-folder-id="${nestedFolder.getId()}">AGGIUNGI DOCUMENTO</button>
+               	</div>
             </div>
             <!-- Campo di input per il nome della nuova sottocartella -->
             <div class="subfolder-input" style="display:none;">

@@ -1,8 +1,11 @@
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,6 +17,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import com.google.gson.Gson;
+
+import it.polimi.tiw.beans.Folder;
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.FolderDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
@@ -62,6 +68,16 @@ public class CreaSottoCartella extends HttpServlet {
         try {
             folderDao.addSubfolder(user.getUsername(), parentId, nomeSottoCartella);
             response.setStatus(HttpServletResponse.SC_OK);
+            // Recupera i dati aggiornati delle cartelle e dei documenti
+            //Folder parFolder = folderDao.findFolderById(parentId);
+            //List<Folder> folders = parFolder.getFolders();
+            //List<Document> documents = parentFolder.getDocuments();
+
+            // Crea la risposta JSON
+            //response.setContentType("application/json");
+            //PrintWriter out = response.getWriter();
+            //out.print(new Gson().toJson(Map.of("folders", folders)));
+            //out.flush();
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Errore: " + e.getMessage());

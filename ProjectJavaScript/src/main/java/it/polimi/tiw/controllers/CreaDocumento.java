@@ -1,8 +1,11 @@
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -17,6 +20,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import com.google.gson.Gson;
 
 import it.polimi.tiw.beans.Folder;
 import it.polimi.tiw.beans.User;
@@ -89,9 +94,17 @@ public class CreaDocumento extends HttpServlet {
 
         try {
         	documentDao.newDocument(user.getUsername(), folderId, documentName, documentDate, documentType, documentSummary);
-
             response.setStatus(HttpServletResponse.SC_OK);
-            
+            // Recupera i dati aggiornati delle cartelle e dei documenti
+            //Folder parentFolder = folderDao.findFolderById(folderId);
+            //List<Folder> folders = parentFolder.getFolders();
+            //List<Document> documents = parentFolder.getDocuments();
+
+            // Crea la risposta JSON
+            //response.setContentType("application/json");
+            //PrintWriter out = response.getWriter();
+            //out.print(new Gson().toJson(Map.of("folders", folders)));
+            //out.flush();
         } catch (SQLException e) {
             // Gestione dell'errore
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
