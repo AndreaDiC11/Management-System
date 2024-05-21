@@ -54,24 +54,20 @@ public class CreaDocumento extends HttpServlet {
 
         // Recupera l'utente dalla sessione
         User user = (User) session.getAttribute("user");
-        String folderName = StringEscapeUtils.escapeJava(request.getParameter("folderName"));
+        int folderId = Integer.parseInt(request.getParameter("parentId"));
         String documentName = StringEscapeUtils.escapeJava(request.getParameter("documentName"));
         String documentDate = StringEscapeUtils.escapeJava(request.getParameter("documentDate"));
         String documentType = StringEscapeUtils.escapeJava(request.getParameter("documentType"));
         String documentSummary = StringEscapeUtils.escapeJava(request.getParameter("documentSummary"));
-
         
         try { 
-        	if (folderName == "" || documentName == "" || documentDate == "" || documentType == "" || documentSummary == "") {
+        	if (documentName == "" || documentDate == "" || documentType == "" || documentSummary == "") {
 				throw new Exception("Missing Information");
         	}
         }catch (Exception e) {
-			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("errorMsg3", e.getMessage());
-			String path = "/WEB-INF/GestioneContenuti.html";
-			templateEngine.process(path, ctx, response.getWriter());
-	        return;
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Errore: " + e.getMessage());
+            return;
         }
 
 
@@ -79,32 +75,27 @@ public class CreaDocumento extends HttpServlet {
         FolderDAO folderDao = new FolderDAO(connection);
         Folder folder = null;
 		try {
-			folder = folderDao.findFolderByName(user.getUsername(), folderName);
+			folder = folderDao.findFolderById(folderId);
 			if (folder == null) {
 	            throw new SQLException("La cartella genitore non esiste");
 			}
 		} catch (SQLException e) {
-			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("errorMsg3", e.getMessage());
-			String path = "/WEB-INF/GestioneContenuti.html";
-			templateEngine.process(path, ctx, response.getWriter());
-	        return;
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Errore: " + e.getMessage());
+            return;
 		}
+		
+		
 
         try {
-        	documentDao.newDocument(user.getUsername(), folder.getId(), documentName, documentDate, documentType, documentSummary);
+        	documentDao.newDocument(user.getUsername(), folderId, documentName, documentDate, documentType, documentSummary);
 
-            response.sendRedirect(request.getContextPath() + "/GestioneContenuti");
-
+            response.setStatus(HttpServletResponse.SC_OK);
+            
         } catch (SQLException e) {
             // Gestione dell'errore
-			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("errorMsg1", e.getMessage());
-			String path = "/WEB-INF/GestioneContenuti.html";
-			templateEngine.process(path, ctx, response.getWriter());
-	        return;
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Errore: " + e.getMessage());
         }
     }
 
