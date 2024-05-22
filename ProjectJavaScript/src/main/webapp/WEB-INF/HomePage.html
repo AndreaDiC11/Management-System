@@ -21,7 +21,9 @@
                     <a th:href="'Contenuti?folderId=' + ${folder.getId()}" th:text="${folder.getName()}"></a>
                     <!-- Contenitore per i pulsanti e i form -->
                     <div class="action-buttons">
+                        <div th:if="${#lists.isEmpty(folder.getDocuments())}">    
                         <button type="button" class="add-subfolder-btn" th:data-folder-id="${folder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                        </div>
                         <button type="button" class="add-document-btn" th:data-folder-id="${folder.getId()}">AGGIUNGI DOCUMENTO</button>
                     </div>
                     <!-- Campo di input per il nome della nuova sottocartella -->
@@ -65,7 +67,9 @@
                             </a>
                             <!-- Contenitore per i pulsanti e i form -->
                             <div class="action-buttons">
+                                <div th:if="${#lists.isEmpty(subfolder.getDocuments())}">                         
                                 <button type="button" class="add-subfolder-btn" th:data-folder-id="${subfolder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                                </div>
                                 <div th:if="${#lists.isEmpty(subfolder.getFolders())}">    
                                 	<button type="button" class="add-document-btn" th:data-folder-id="${subfolder.getId()}">AGGIUNGI DOCUMENTO</button>
                                 </div>
@@ -107,7 +111,9 @@
             <a th:href="'Contenuti?folderId=' + ${nestedFolder.getId()}" th:text="${nestedFolder.getName()}"></a>
             <!-- Contenitore per i pulsanti e i form -->
             <div class="action-buttons">
+                <div th:if="${#lists.isEmpty(nestedFolder.getDocuments())}">                                     
                 <button type="button" class="add-subfolder-btn" th:data-folder-id="${nestedFolder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                </div>
                 <button type="button" class="add-document-btn" th:data-folder-id="${nestedFolder.getId()}">AGGIUNGI DOCUMENTO</button>
             </div>
             <!-- Campo di input per il nome della nuova sottocartella -->
@@ -135,7 +141,9 @@
             <span th:text="${nestedFolder.getName()}"></span>
             <!-- Contenitore per i pulsanti e i form -->
             <div class="action-buttons">
+            	<div th:if="${#lists.isEmpty(nestedFolder.getDocuments())}">                                            
                 <button type="button" class="add-subfolder-btn" th:data-folder-id="${nestedFolder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
+                </div>
                 <div th:if="${#lists.isEmpty(nestedFolder.getFolders())}">    
                 	<button type="button" class="add-document-btn" th:data-folder-id="${nestedFolder.getId()}">AGGIUNGI DOCUMENTO</button>
                	</div>
