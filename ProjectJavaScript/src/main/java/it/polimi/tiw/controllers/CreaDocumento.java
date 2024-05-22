@@ -53,11 +53,11 @@ public class CreaDocumento extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.isNew() || session.getAttribute("user") == null) {
-            response.sendRedirect(getServletContext().getContextPath() + "/index.html");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("User not logged in.");
             return;
         }
 
-        // Recupera l'utente dalla sessione
         User user = (User) session.getAttribute("user");
         int folderId = Integer.parseInt(request.getParameter("parentId"));
         String documentName = StringEscapeUtils.escapeJava(request.getParameter("documentName"));
@@ -66,47 +66,35 @@ public class CreaDocumento extends HttpServlet {
         String documentSummary = StringEscapeUtils.escapeJava(request.getParameter("documentSummary"));
         
         try { 
-        	if (documentName == "" || documentDate == "" || documentType == "" || documentSummary == "") {
-				throw new Exception("Missing Information");
-        	}
-        }catch (Exception e) {
+            if (documentName.isEmpty() || documentDate.isEmpty() || documentType.isEmpty() || documentSummary.isEmpty()) {
+                throw new Exception("Missing Information");
+            }
+        } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Errore: " + e.getMessage());
             return;
         }
 
-
         DocumentDAO documentDao = new DocumentDAO(connection);
         FolderDAO folderDao = new FolderDAO(connection);
         Folder folder = null;
-		try {
-			folder = folderDao.findFolderById(folderId);
-			if (folder == null) {
-	            throw new SQLException("La cartella genitore non esiste");
-			}
-		} catch (SQLException e) {
+        try {
+            folder = folderDao.findFolderById(folderId);
+            if (folder == null) {
+                throw new SQLException("La cartella genitore non esiste");
+            }
+        } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Errore: " + e.getMessage());
             return;
-		}
-		
-		
+        }
 
         try {
-        	documentDao.newDocument(user.getUsername(), folderId, documentName, documentDate, documentType, documentSummary);
-            response.setStatus(HttpServletResponse.SC_OK);
-            // Recupera i dati aggiornati delle cartelle e dei documenti
-            //Folder parentFolder = folderDao.findFolderById(folderId);
-            //List<Folder> folders = parentFolder.getFolders();
-            //List<Document> documents = parentFolder.getDocuments();
-
-            // Crea la risposta JSON
+            documentDao.newDocument(user.getUsername(), folderId, documentName, documentDate, documentType, documentSummary);
+            //response.setStatus(HttpServletResponse.SC_OK);
             //response.setContentType("application/json");
-            //PrintWriter out = response.getWriter();
-            //out.print(new Gson().toJson(Map.of("folders", folders)));
-            //out.flush();
+            response.getWriter().write("{\"status\":\"success\"}");
         } catch (SQLException e) {
-            // Gestione dell'errore
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Errore: " + e.getMessage());
         }

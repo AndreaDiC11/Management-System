@@ -34,13 +34,33 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: `parentId=${parentId}&folderName=${encodeURIComponent(subfolderName)}`
                 })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Aggiorna dinamicamente il DOM con la nuova sottocartella
+                        const newFolder = document.createElement('li');
+                        newFolder.innerHTML = `
+                            <a href="Contenuti?folderId=${data.folderId}">${subfolderName}</a>
+                            <div class="action-buttons">
+                                <button type="button" class="add-subfolder-btn" data-folder-id="${data.folderId}">AGGIUNGI SOTTOCARTELLA</button>
+                                <button type="button" class="add-document-btn" data-folder-id="${data.folderId}">AGGIUNGI DOCUMENTO</button>
+                            </div>
+                            <div class="subfolder-input" style="display:none;">
+                                <input type="text" placeholder="Nome sottocartella">
+                                <button type="button" class="save-subfolder-btn">Salva</button>
+                            </div>
+                            <div class="document-input" style="display:none;">
+                                <input type="text" placeholder="Nome documento">
+                                <input type="date" placeholder="Data documento">
+                                <input type="text" placeholder="Tipo documento">
+                                <textarea placeholder="Sommario documento"></textarea>
+                                <button type="button" class="save-document-btn">Salva</button>
+                            </div>`;
+                        inputDiv.closest('ul').appendChild(newFolder);
+                        inputField.value = '';
+                        inputDiv.style.display = 'none';
                     } else {
-                        return response.text().then(errorMessage => {
-                            throw new Error(errorMessage);
-                        });
+                        alert(data.message);
                     }
                 })
                 .catch(error => {
@@ -74,13 +94,41 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: `parentId=${parentId}&documentName=${encodeURIComponent(documentName)}&documentDate=${encodeURIComponent(documentDate)}&documentType=${encodeURIComponent(documentType)}&documentSummary=${encodeURIComponent(documentSummary)}`
                 })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+ 						// Aggiorna dinamicamente il DOM con il nuovo documento
+                        //const newDocument = document.createElement('li');
+                        //newDocument.innerHTML = `<span>${documentName}</span>`;
+                        //inputDiv.closest('ul').appendChild(newDocument);
+                        //const folderId = parentId.toString();
+						const documentList = document.getElementById(`documentList_${parentId}`);
+						//const documentList = document.getElementById('documentList');
+						if (documentList) {
+						    //Crea un nuovo elemento <li> per il nuovo documento
+						    const newDocumentItem = document.createElement('li');
+						
+						    //Aggiungi il nome del nuovo documento all'elemento <li>
+						    newDocumentItem.innerHTML = `<span>${documentName}</span>`;
+						
+						    //Aggiungi l'elemento <li> alla lista dei documenti
+						    documentList.appendChild(newDocumentItem);
+						    }
+
+                        // Rimuovi il pulsante "AGGIUNGI SOTTOCARTELLA"
+                        const addSubfolderBtn = button.closest('li').querySelector('.add-subfolder-btn');
+                        if (addSubfolderBtn) {
+                            addSubfolderBtn.remove();
+                        }
+
+                        // Resetta i campi di input
+                        documentNameField.value = '';
+                        documentDateField.value = '';
+                        documentTypeField.value = '';
+                        documentSummaryField.value = '';
+                        inputDiv.style.display = 'none';
                     } else {
-                        return response.text().then(errorMessage => {
-                            throw new Error(errorMessage);
-                        });
+                        alert(data.message);
                     }
                 })
                 .catch(error => {
