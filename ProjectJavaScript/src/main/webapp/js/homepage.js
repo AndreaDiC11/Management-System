@@ -98,22 +98,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                     if (data.status === 'success') {
  						// Aggiorna dinamicamente il DOM con il nuovo documento
-                        //const newDocument = document.createElement('li');
-                        //newDocument.innerHTML = `<span>${documentName}</span>`;
-                        //inputDiv.closest('ul').appendChild(newDocument);
-                        //const folderId = parentId.toString();
-						const documentList = document.getElementById(`documentList_${parentId}`);
-						//const documentList = document.getElementById('documentList');
-						if (documentList) {
-						    //Crea un nuovo elemento <li> per il nuovo documento
-						    const newDocumentItem = document.createElement('li');
+						//alert(parentId);
+					    //Crea un nuovo elemento <li> per il nuovo documento
+						const documentList = button.closest('li').querySelector('ul');
+						if (documentList){
+							
+					    	const newDocumentItem = document.createElement('li');
 						
 						    //Aggiungi il nome del nuovo documento all'elemento <li>
 						    newDocumentItem.innerHTML = `<span>${documentName}</span>`;
 						
 						    //Aggiungi l'elemento <li> alla lista dei documenti
 						    documentList.appendChild(newDocumentItem);
-						    }
+					    } else {
+							// Creare la lista ul
+						    const documentList1 = document.createElement('ul');
+						    // Aggiungere la lista al parente appropriato
+						    button.closest('li').appendChild(documentList1);
+	                       	const newDocument = document.createElement('li');
+	                        newDocument.innerHTML = `<span>${documentName}</span>`;
+	                        documentList1.appendChild(newDocument);
+						}
+						    
 
                         // Rimuovi il pulsante "AGGIUNGI SOTTOCARTELLA"
                         const addSubfolderBtn = button.closest('li').querySelector('.add-subfolder-btn');

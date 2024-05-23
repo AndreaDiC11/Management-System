@@ -40,7 +40,7 @@
                         <button type="button" class="save-document-btn">Salva</button>
                     </div>
                     <!-- Iterazione sui documenti della cartella -->
-	                <ul id="documentList_${folder.getId())}" th:if="${!#lists.isEmpty(folder.getDocuments())}">
+	                <ul th:if="${!#lists.isEmpty(folder.getDocuments())}">
 	                    <li th:each="document : ${folder.getDocuments()}">
 	                        <span th:text="${document.getName()}"></span>
 	                    </li>
@@ -88,7 +88,7 @@
                                 <button type="button" class="save-document-btn">Salva</button>
                             </div>
                             <!-- Iterazione sui documenti della cartella -->
-			                <ul id="documentList_${subfolder.getId()}" th:if="${!#lists.isEmpty(subfolder.getDocuments())}">
+			                <ul th:if="${!#lists.isEmpty(subfolder.getDocuments())}">
 			                    <li th:each="document : ${subfolder.getDocuments()}">
 			                        <span th:text="${document.getName()}"></span>
 			                    </li>
@@ -130,7 +130,7 @@
                 <button type="button" class="save-document-btn">Salva</button>
             </div>
             <!-- Iterazione sui documenti della cartella -->
-            <ul id="documentList_${nestedFolder.getId()}" th:if="${!#lists.isEmpty(nestedFolder.getDocuments())}">
+            <ul th:if="${!#lists.isEmpty(nestedFolder.getDocuments())}">
                 <li th:each="document : ${nestedFolder.getDocuments()}">
                     <span th:text="${document.getName()}"></span>
                 </li>
