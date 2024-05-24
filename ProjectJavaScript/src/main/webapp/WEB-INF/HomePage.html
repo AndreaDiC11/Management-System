@@ -18,7 +18,7 @@
             <li th:each="folder : ${folders}">
                 <div th:if="${#lists.isEmpty(folder.getFolders())}">
                     <!-- Se non ci sono sottocartelle, mostra un link per visualizzare i documenti -->
-                    <a th:href="'Contenuti?folderId=' + ${folder.getId()}" th:text="${folder.getName()}"></a>
+                    <span th:text="${folder.getName()}"></span>
                     <!-- Contenitore per i pulsanti e i form -->
                     <div class="action-buttons">
                         <div th:if="${#lists.isEmpty(folder.getDocuments())}">    
@@ -61,10 +61,8 @@
                     <!-- Iterazione sulle sotto-cartelle -->
                     <ul>
                         <li th:each="subfolder : ${folder.getFolders()}">
-                            <!-- Mostra i nomi delle sotto-cartelle con link -->
-                            <a th:href="'Contenuti?folderId=' + ${subfolder.getId()}">
-                                <span th:text="${subfolder.getName()}"></span>
-                            </a>
+                            <!-- Mostra i nomi delle sotto-cartelle -->
+                            <span th:text="${subfolder.getName()}"></span>
                             <!-- Contenitore per i pulsanti e i form -->
                             <div class="action-buttons">
                                 <div th:if="${#lists.isEmpty(subfolder.getDocuments())}">                         
@@ -108,7 +106,7 @@
     <div th:fragment="folderFragment">
         <div th:if="${#lists.isEmpty(nestedFolder.getFolders())}">
             <!-- Se non ci sono sottocartelle, mostra un link per visualizzare i documenti -->
-            <a th:href="'Contenuti?folderId=' + ${nestedFolder.getId()}" th:text="${nestedFolder.getName()}"></a>
+            <span th:text="${nestedFolder.getName()}"></span>
             <!-- Contenitore per i pulsanti e i form -->
             <div class="action-buttons">
                 <div th:if="${#lists.isEmpty(nestedFolder.getDocuments())}">                                     
