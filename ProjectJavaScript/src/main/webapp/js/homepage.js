@@ -18,13 +18,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const saveSubfolderButtons = document.querySelectorAll('.save-subfolder-btn');
     const saveDocumentButtons = document.querySelectorAll('.save-document-btn');
+    
 
     // Definizione della funzione saveSubfolder
-function saveSubfolder(button) {
+function saveSubfolder(button, parentId) {
     const inputDiv = button.parentElement;
     const inputField = inputDiv.querySelector('input');
     const subfolderName = inputField.value;
-    const parentId = button.closest('li').querySelector('.add-subfolder-btn').dataset.folderId;
+    //const parentId = button.closest('li').querySelector('.add-subfolder-btn').dataset.folderId;
 
     if (subfolderName) {
         fetch('CreaSottoCartella', {
@@ -61,21 +62,36 @@ function saveSubfolder(button) {
                         <ul></ul>`;
                     folderList.appendChild(newFolderItem);
 
-                    // Aggiungi l'evento click per la nuova sottocartella
-                    const newAddSubfolderBtn = newFolderItem.querySelector('.add-subfolder-btn');
-                    if (newAddSubfolderBtn) {
-                        newAddSubfolderBtn.addEventListener('click', function () {
-                            saveSubfolder(newAddSubfolderBtn);
-                        });
-                    }
-
-                    // Aggiungi l'evento click per il nuovo documento
-                    const newAddDocumentBtn = newFolderItem.querySelector('.add-document-btn');
-                    if (newAddDocumentBtn) {
-                        newAddDocumentBtn.addEventListener('click', function () {
-                            saveDocument(newAddDocumentBtn);
-                        });
-                    }
+			                    // Aggiungi l'evento click per la nuova sottocartella
+			        const newAddSubfolderBtn = newFolderItem.querySelector('.add-subfolder-btn');
+			        if (newAddSubfolderBtn) {
+			            newAddSubfolderBtn.addEventListener('click', function () {
+			                const inputDiv = newAddSubfolderBtn.closest('.action-buttons').nextElementSibling;
+			                inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
+			            });
+			        }
+			
+			        const newSaveSubfolderBtn = newFolderItem.querySelector('.save-subfolder-btn');
+			        if (newSaveSubfolderBtn) {
+			            newSaveSubfolderBtn.addEventListener('click', function () {
+			                saveSubfolder(newSaveSubfolderBtn, data.folderId);
+			            });
+			        }
+			
+			        const newAddDocumentBtn = newFolderItem.querySelector('.add-document-btn');
+			        if (newAddDocumentBtn) {
+			            newAddDocumentBtn.addEventListener('click', function () {
+			                const inputDiv = newAddDocumentBtn.closest('.action-buttons').nextElementSibling.nextElementSibling;
+			                inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
+			            });
+			        }
+			
+			        const newSaveDocumentBtn = newFolderItem.querySelector('.save-document-btn');
+			        if (newSaveDocumentBtn) {
+			            newSaveDocumentBtn.addEventListener('click', function () {
+			                saveDocument(newSaveDocumentBtn, data.folderId);
+			            });
+			        }
                 } else {
                     // Se non c'è una lista, crea una nuova
                     const folderList1 = document.createElement('ul');
@@ -101,22 +117,36 @@ function saveSubfolder(button) {
                         <ul></ul>`;
                     folderList1.appendChild(newFolder);
 
-                    // Aggiungi l'evento click per la nuova sottocartella
-                    const newAddSubfolderBtn = newFolder.querySelector('.add-subfolder-btn');
-                    if (newAddSubfolderBtn) {
-                        newAddSubfolderBtn.addEventListener('click', function () {
-                            saveSubfolder(newAddSubfolderBtn);
-                        });
-                    }
-
-                    // Aggiungi l'evento click per il nuovo documento
-                    const newAddDocumentBtn = newFolder.querySelector('.add-document-btn');
-                    if (newAddDocumentBtn) {
-                        newAddDocumentBtn.addEventListener('click', function () {
-                            saveDocument(newAddDocumentBtn);
-                        });
-                    }
-                	}
+			        const newAddSubfolderBtn = newFolder.querySelector('.add-subfolder-btn');
+			        if (newAddSubfolderBtn) {
+			            newAddSubfolderBtn.addEventListener('click', function () {
+			                const inputDiv = newAddSubfolderBtn.closest('.action-buttons').nextElementSibling;
+			                inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
+			            });
+			        }
+			
+			        const newSaveSubfolderBtn = newFolder.querySelector('.save-subfolder-btn');
+			        if (newSaveSubfolderBtn) {
+			            newSaveSubfolderBtn.addEventListener('click', function () {
+			                saveSubfolder(newSaveSubfolderBtn, data.folderId);
+			            });
+			        }
+			
+			        const newAddDocumentBtn = newFolder.querySelector('.add-document-btn');
+			        if (newAddDocumentBtn) {
+			            newAddDocumentBtn.addEventListener('click', function () {
+			                const inputDiv = newAddDocumentBtn.closest('.action-buttons').nextElementSibling.nextElementSibling;
+			                inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
+			            });
+			        }
+			
+			        const newSaveDocumentBtn = newFolder.querySelector('.save-document-btn');
+			        if (newSaveDocumentBtn) {
+			            newSaveDocumentBtn.addEventListener('click', function () {
+			                saveDocument(newSaveDocumentBtn, data.folderId);
+			            });
+			        }
+            	}
 
 	                // Rimuovi il pulsante "AGGIUNGI SOTTOCARTELLA"
 	                const addDocumentBtn = button.closest('li').querySelector('.add-document-btn');
@@ -138,18 +168,20 @@ function saveSubfolder(button) {
 	    } else {
 	        alert('Inserisci un nome per la sottocartella');
 	    }
+	    
+	    
 	}
 
 	// Utilizzo della funzione saveSubfolder all'interno del ciclo forEach
 	saveSubfolderButtons.forEach(button => {
 	    button.addEventListener('click', function () {
-	        saveSubfolder(button);
+	        saveSubfolder(button, button.closest('li').querySelector('.add-subfolder-btn').dataset.folderId);
 	    });
 	});
 
 
 // Definizione della funzione saveDocument
-function saveDocument(button) {
+function saveDocument(button, parentId) {
     const inputDiv = button.parentElement;
     const documentNameField = inputDiv.querySelector('input[type="text"]');
     const documentDateField = inputDiv.querySelector('input[type="date"]');
@@ -159,7 +191,7 @@ function saveDocument(button) {
     const documentDate = documentDateField.value;
     const documentType = documentTypeField.value;
     const documentSummary = documentSummaryField.value;
-    const parentId = button.closest('li').querySelector('.add-document-btn').dataset.folderId;
+    //const parentId = button.closest('li').querySelector('.add-document-btn').dataset.folderId;
 
     if (documentName && documentDate && documentType && documentSummary) {
         fetch('CreaDocumento', {
@@ -216,7 +248,7 @@ function saveDocument(button) {
 	// Utilizzo della funzione saveDocument all'interno del ciclo forEach
 	saveDocumentButtons.forEach(button => {
 	    button.addEventListener('click', function () {
-	        saveDocument(button);
+	        saveDocument(button, button.closest('li').querySelector('.add-document-btn').dataset.folderId);
 	    });
 	});
 

@@ -153,7 +153,7 @@
             </div>
             <!-- Iterazione sulle sotto-cartelle -->
             <ul>
-                <li th:each="nestedSubfolder : ${nestedFolder.getFolders()}" th:include="this :: folderFragment"></li>
+                <li th:each="nestedFolder : ${nestedFolder.getFolders()}" th:include="this :: folderFragment"></li>
             </ul>
         </div>
     </div>
