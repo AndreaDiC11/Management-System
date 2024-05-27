@@ -208,6 +208,7 @@ function saveDocument(button, parentId) {
                 const documentList = button.closest('li').querySelector('ul');
                 if (documentList) {
                     const newDocumentItem = document.createElement('li');
+                    newDocumentItem.setAttribute('draggable', true);
                     newDocumentItem.innerHTML = `<span>${documentName}</span>`;
                     documentList.appendChild(newDocumentItem);
                 } else {
@@ -216,6 +217,7 @@ function saveDocument(button, parentId) {
                     // Aggiungere la lista al parente appropriato
                     button.closest('li').appendChild(documentList1);
                     const newDocument = document.createElement('li');
+                    newDocument.setAttribute('draggable', true);
                     newDocument.innerHTML = `<span>${documentName}</span>`;
                     documentList1.appendChild(newDocument);
                 }
@@ -232,6 +234,8 @@ function saveDocument(button, parentId) {
                 documentTypeField.value = '';
                 documentSummaryField.value = '';
                 inputDiv.style.display = 'none';
+                
+                addDragAndDropListeners();
             } else {
                 alert(data.message);
             }
@@ -251,5 +255,74 @@ function saveDocument(button, parentId) {
 	        saveDocument(button, button.closest('li').querySelector('.add-document-btn').dataset.folderId);
 	    });
 	});
+	
+	function handleDragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.dataset.documentId);
+        event.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragOver(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+    }
+
+    function handleDrop(event) {
+        event.preventDefault();
+        const documentId = event.dataTransfer.getData('text/plain');
+        const targetFolderId = event.target.closest('li[data-folder-id]').dataset.folderId;
+
+        fetch('SpostaDocumento', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `documentId=${documentId}&targetFolderId=${targetFolderId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const documentElement = document.querySelector(`li[data-document-id="${documentId}"]`);
+                const oldParentElement = documentElement.parentElement;
+                const targetFolderElement = document.querySelector(`li[data-folder-id="${targetFolderId}"] ul`);
+
+                // Rimuovi il documento dalla vecchia cartella
+                oldParentElement.removeChild(documentElement);
+
+                // Aggiungi il documento alla nuova cartella
+                if (targetFolderElement) {
+                    targetFolderElement.appendChild(documentElement);
+                } else {
+                    const newUl = document.createElement('ul');
+                    newUl.appendChild(documentElement);
+                    document.querySelector(`li[data-folder-id="${targetFolderId}"]`).appendChild(newUl);
+                }
+            } else {
+                alert('Errore nello spostamento del documento');
+            }
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert('Errore nello spostamento del documento');
+        });
+    }
+
+    function addDragAndDropListeners() {
+        const documentItems = document.querySelectorAll('li[data-document-id]');
+        const folderItems = document.querySelectorAll('li[th\\:each]');
+
+        documentItems.forEach(item => {
+            item.setAttribute('draggable', true);
+            item.addEventListener('dragstart', handleDragStart);
+        });
+
+        folderItems.forEach(item => {
+            item.addEventListener('dragover', handleDragOver);
+            item.addEventListener('drop', handleDrop);
+        });
+    }
+
+    // Chiamata per aggiungere gli event listeners per la prima volta
+    addDragAndDropListeners();
+	
 
 });

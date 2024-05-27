@@ -41,7 +41,7 @@
                     </div>
                     <!-- Iterazione sui documenti della cartella -->
 	                <ul th:if="${!#lists.isEmpty(folder.getDocuments())}">
-	                    <li th:each="document : ${folder.getDocuments()}">
+	                    <li th:each="document : ${folder.getDocuments()}" th:data-document-id="${document.getId()}" draggable="true">
 	                        <span th:text="${document.getName()}"></span>
 	                    </li>
 	                </ul>
@@ -87,7 +87,7 @@
                             </div>
                             <!-- Iterazione sui documenti della cartella -->
 			                <ul th:if="${!#lists.isEmpty(subfolder.getDocuments())}">
-			                    <li th:each="document : ${subfolder.getDocuments()}">
+			                    <li th:each="document : ${subfolder.getDocuments()}" th:data-document-id="${document.getId()}" draggable="true">
 			                        <span th:text="${document.getName()}"></span>
 			                    </li>
 			                </ul>
@@ -129,7 +129,7 @@
             </div>
             <!-- Iterazione sui documenti della cartella -->
             <ul th:if="${!#lists.isEmpty(nestedFolder.getDocuments())}">
-                <li th:each="document : ${nestedFolder.getDocuments()}">
+                <li th:each="document : ${nestedFolder.getDocuments()}" th:data-document-id="${document.getId()}" draggable="true">
                     <span th:text="${document.getName()}"></span>
                 </li>
             </ul>
