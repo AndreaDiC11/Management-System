@@ -15,7 +15,7 @@
     <div id="tree">
         <ul>
             <!-- Iterazione sulle cartelle -->
-            <li th:each="folder : ${folders}">
+            <li th:each="folder : ${folders}" th:data-folder-id="${folder.getId()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
                 <div th:if="${#lists.isEmpty(folder.getFolders())}">
                     <!-- Se non ci sono sottocartelle, mostra un link per visualizzare i documenti -->
                     <span th:text="${folder.getName()}"></span>
@@ -60,7 +60,7 @@
                     </div>
                     <!-- Iterazione sulle sotto-cartelle -->
                     <ul>
-                        <li th:each="subfolder : ${folder.getFolders()}">
+                        <li th:each="subfolder : ${folder.getFolders()}" th:data-folder-id="${subfolder.getId()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
                             <!-- Mostra i nomi delle sotto-cartelle -->
                             <span th:text="${subfolder.getName()}"></span>
                             <!-- Contenitore per i pulsanti e i form -->
@@ -94,7 +94,7 @@
                             
                             <!-- Chiamata ricorsiva per le sottocartelle annidate -->
                             <ul th:if="${!#lists.isEmpty(subfolder.getFolders())}">
-                                <li th:each="nestedFolder : ${subfolder.getFolders()}" th:include="this :: folderFragment"></li>
+                                <li th:each="nestedFolder : ${subfolder.getFolders()}" th:data-folder-id="${nestedFolder.getId()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" th:include="this :: folderFragment"></li>
                             </ul>
                         </li>
                     </ul>
@@ -153,7 +153,7 @@
             </div>
             <!-- Iterazione sulle sotto-cartelle -->
             <ul>
-                <li th:each="nestedFolder : ${nestedFolder.getFolders()}" th:include="this :: folderFragment"></li>
+                <li th:each="nestedFolder : ${nestedFolder.getFolders()}" th:data-folder-id="${nestedFolder.getId()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" th:include="this :: folderFragment"></li>
             </ul>
         </div>
     </div>

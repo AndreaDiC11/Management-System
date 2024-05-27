@@ -308,7 +308,7 @@ function saveDocument(button, parentId) {
 
     function addDragAndDropListeners() {
         const documentItems = document.querySelectorAll('li[data-document-id]');
-        const folderItems = document.querySelectorAll('li[th\\:each]');
+        const folderItems = document.querySelectorAll('li[data-folder-id]');
 
         documentItems.forEach(item => {
             item.setAttribute('draggable', true);
