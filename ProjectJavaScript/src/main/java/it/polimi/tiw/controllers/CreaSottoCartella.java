@@ -64,9 +64,8 @@ public class CreaSottoCartella extends HttpServlet {
 
         try {
             folderDao.addSubfolder(user.getUsername(), parentId, nomeSottoCartella);
-            //response.setStatus(HttpServletResponse.SC_OK);
             int folderId = folderDao.findFolderByName(user.getUsername(), nomeSottoCartella).getId();
-            //response.setContentType("application/json");
+            //response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("{\"status\":\"success\", \"folderId\": " + folderId + "}");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

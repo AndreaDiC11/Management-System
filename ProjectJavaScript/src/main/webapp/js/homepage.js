@@ -209,6 +209,7 @@ function saveDocument(button, parentId) {
                 if (documentList) {
                     const newDocumentItem = document.createElement('li');
                     newDocumentItem.setAttribute('draggable', true);
+                    newDocumentItem.setAttribute('data-document-id', data.documentId);
                     newDocumentItem.innerHTML = `<span>${documentName}</span>`;
                     documentList.appendChild(newDocumentItem);
                 } else {
@@ -296,6 +297,51 @@ function saveDocument(button, parentId) {
                     newUl.appendChild(documentElement);
                     document.querySelector(`li[data-folder-id="${targetFolderId}"]`).appendChild(newUl);
                 }
+                
+	            const targetAddSubfolderBtn = document.querySelector(`li[data-folder-id="${targetFolderId}"] .add-subfolder-btn`);
+	            if (targetAddSubfolderBtn) {
+	                targetAddSubfolderBtn.remove();
+	            }
+	            
+	            // Controlla se la vecchia cartella è vuota e aggiungi il pulsante "AGGIUNGI SOTTOCARTELLA" se è vuota
+	            if (oldParentElement.children.length === 0) {
+				    const oldFolderId = oldParentElement.closest('li[data-folder-id]').dataset.folderId;
+					const oldFolderElement = document.querySelector(`li[data-folder-id="${oldFolderId}"]`);
+
+    				const actionButtonsDiv = oldFolderElement.querySelector('.action-buttons');
+				if (actionButtonsDiv) {
+			        const addSubfolderBtn = document.createElement('button');
+			        addSubfolderBtn.type = 'button';
+			        addSubfolderBtn.classList.add('add-subfolder-btn');
+			        addSubfolderBtn.setAttribute('data-folder-id', oldFolderId);
+			        addSubfolderBtn.textContent = 'AGGIUNGI SOTTOCARTELLA';
+			
+			        const subfolderInputDiv = document.createElement('div');
+			        subfolderInputDiv.classList.add('subfolder-input');
+			        subfolderInputDiv.style.display = 'none';
+			        subfolderInputDiv.innerHTML = `
+			            <input type="text" placeholder="Nome sottocartella">
+			            <button type="button" class="save-subfolder-btn">Salva</button>
+			        `;
+			
+			        actionButtonsDiv.appendChild(addSubfolderBtn);
+			        oldFolderElement.appendChild(subfolderInputDiv);
+			
+			        // Aggiungi event listener al nuovo pulsante "AGGIUNGI SOTTOCARTELLA"
+			        addSubfolderBtn.addEventListener('click', function () {
+			            const inputDiv = addSubfolderBtn.closest('.action-buttons').nextElementSibling;
+			            inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
+			        });
+			
+			        // Aggiungi event listener al pulsante "SALVA SOTTOCARTELLA"
+			        const saveSubfolderBtn = subfolderInputDiv.querySelector('.save-subfolder-btn');
+			        saveSubfolderBtn.addEventListener('click', function () {
+			            saveSubfolder(this, oldFolderId);
+			        });
+		        }
+            }
+    	                
+                
             } else {
                 alert('Errore nello spostamento del documento');
             }

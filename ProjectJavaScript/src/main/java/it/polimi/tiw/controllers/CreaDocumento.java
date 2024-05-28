@@ -91,9 +91,9 @@ public class CreaDocumento extends HttpServlet {
 
         try {
             documentDao.newDocument(user.getUsername(), folderId, documentName, documentDate, documentType, documentSummary);
+            int documentId = documentDao.findDocumentByFolderIdAndName(folderId, documentName).getId();
             //response.setStatus(HttpServletResponse.SC_OK);
-            //response.setContentType("application/json");
-            response.getWriter().write("{\"status\":\"success\"}");
+            response.getWriter().write("{\"status\":\"success\", \"documentId\": " + documentId + "}");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Errore: " + e.getMessage());

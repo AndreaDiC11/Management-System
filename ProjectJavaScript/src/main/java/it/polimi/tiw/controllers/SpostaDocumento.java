@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import it.polimi.tiw.dao.DocumentDAO;
+import it.polimi.tiw.dao.FolderDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 @WebServlet("/SpostaDocumento")
@@ -40,9 +41,22 @@ public class SpostaDocumento extends HttpServlet {
         int targetFolderId = Integer.parseInt(request.getParameter("targetFolderId"));
 
         DocumentDAO documentDao = new DocumentDAO(connection);
-
+        FolderDAO folderDao = new FolderDAO(connection);
         try {
-        	documentDao.updateDocument(documentId, targetFolderId);
+            // Verifica se la cartella di destinazione contiene altre cartelle
+            if (!folderDao.findFolderById(targetFolderId).getFolders().isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"status\":\"error\", \"message\":\"La cartella di destinazione contiene altre cartelle.\"}");
+                return;
+            }
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Errore: " + e.getMessage());
+            return;
+        }
+        
+        try {
+            documentDao.updateDocument(documentId, targetFolderId);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("{\"status\":\"success\"}");
         } catch (SQLException e) {

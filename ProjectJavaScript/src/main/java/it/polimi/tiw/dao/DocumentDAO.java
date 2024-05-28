@@ -75,6 +75,7 @@ public class DocumentDAO {
         return document;
     }
     public void updateDocument(int documentId, int destinationFolderId) throws SQLException {
+    	
         String moveQuery = "UPDATE documents SET folder_id = ? WHERE id = ?";
         
         try (PreparedStatement statement = connection.prepareStatement(moveQuery)) {
@@ -83,5 +84,28 @@ public class DocumentDAO {
 
             statement.executeUpdate();
         }
+    }
+    public Document findDocumentByFolderIdAndName(int folderId, String documentName) throws SQLException {
+        String query = "SELECT * FROM documents WHERE folder_id = ? AND name = ?";
+        Document document = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, folderId);
+            statement.setString(2, documentName);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int documentId = resultSet.getInt("id");
+                    String documentCreator = resultSet.getString("creator");
+                    String documentDate = resultSet.getString("date");
+                    String documentSummary = resultSet.getString("summary");
+                    String documentType = resultSet.getString("type");
+
+                    document = new Document(documentId, folderId, documentCreator, documentName, documentDate, documentSummary, documentType);
+                }
+            }
+        }
+
+        return document;
     }
 }
