@@ -42,6 +42,9 @@ function saveSubfolder(button, parentId) {
                 const folderList = button.closest('li').querySelector('[th\\:each]');
                 if (folderList) {
                     const newFolderItem = document.createElement('li');
+                    newFolderItem.setAttribute('data-folder-id', data.folderId); // Aggiungi th:data-folder-id
+                    newFolderItem.setAttribute('ondrop', 'handleDrop(event)'); // Aggiungi ondrop
+                    newFolderItem.setAttribute('ondragover', 'handleDragOver(event)'); // Aggiungi ondragover
                     newFolderItem.innerHTML = `
                         <span>${subfolderName}</span>
                         <div class="action-buttons">
@@ -97,6 +100,9 @@ function saveSubfolder(button, parentId) {
                     const folderList1 = document.createElement('ul');
                     button.closest('li').appendChild(folderList1);
                     const newFolder = document.createElement('li');
+                    newFolder.setAttribute('data-folder-id', data.folderId); // Aggiungi th:data-folder-id
+                    newFolder.setAttribute('ondrop', 'handleDrop(event)'); // Aggiungi ondrop
+                    newFolder.setAttribute('ondragover', 'handleDragOver(event)'); // Aggiungi ondragover
                     newFolder.innerHTML = `
                         <span>${subfolderName}</span>
                         <div class="action-buttons">
