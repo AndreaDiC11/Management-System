@@ -21,10 +21,12 @@
                     <span th:text="${folder.getName()}"></span>
                     <!-- Contenitore per i pulsanti e i form -->
                     <div class="action-buttons">
-                        <div th:if="${#lists.isEmpty(folder.getDocuments())}">    
+                        <div th:unless="${folder.getName() == 'Cestino'}" th:if="${#lists.isEmpty(folder.getDocuments())}">    
                         <button type="button" class="add-subfolder-btn" th:data-folder-id="${folder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
                         </div>
+                        <div th:unless="${folder.getName() == 'Cestino'}">                             
                         <button type="button" class="add-document-btn" th:data-folder-id="${folder.getId()}">AGGIUNGI DOCUMENTO</button>
+                        </div>
                     </div>
                     <!-- Campo di input per il nome della nuova sottocartella -->
                     <div class="subfolder-input" style="display:none;">

@@ -15,6 +15,10 @@ public class UserDAO {
     public void addUser(User user) throws SQLException {
         String SELECT_USER_SQL = "SELECT * FROM Users WHERE username = ?";
         String INSERT_USER_SQL = "INSERT INTO Users (username, email, password) VALUES (?, ?, ?)";
+        String INSERT_TRASH_FOLDER_SQL = "INSERT INTO folders (creator, name, parent_id) VALUES (?, ?, ?)";
+        String INSERT_TOP_FOLDER_SQL = "INSERT INTO folders (creator, name, parent_id) VALUES (?, ?, ?)";
+
+
         
         try {
             // Verifica se lo username è già presente nel database
@@ -34,6 +38,24 @@ public class UserDAO {
             insertStatement.setString(3, user.getPassword());
 
             insertStatement.executeUpdate();
+            
+            // Inserisce la cartella "Cestino" associata all'utente nel database
+            PreparedStatement insertTrashFolderStatement = connection.prepareStatement(INSERT_TRASH_FOLDER_SQL);
+            insertTrashFolderStatement.setString(1, user.getUsername());
+            insertTrashFolderStatement.setString(2, "Cestino");
+            insertTrashFolderStatement.setInt(3, 0);
+
+
+            insertTrashFolderStatement.executeUpdate();
+            
+            // Inserisce la cartella "Cestino" associata all'utente nel database
+            PreparedStatement insertTopFolderStatement = connection.prepareStatement(INSERT_TOP_FOLDER_SQL);
+            insertTopFolderStatement.setString(1, user.getUsername());
+            insertTopFolderStatement.setString(2, "Cartella");
+            insertTopFolderStatement.setInt(3, 0);
+
+
+            insertTopFolderStatement.executeUpdate();
 
         } catch (SQLException e) {
             // Gestione dell'eccezione SQLException
