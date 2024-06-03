@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addSubfolderButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const inputDiv = button.closest('.action-buttons').nextElementSibling;
+			const inputDiv = button.closest('.action-buttons').parentElement.querySelector('.subfolder-input');
             inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
         });
     });
 
     addDocumentButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const inputDiv = button.closest('.action-buttons').nextElementSibling.nextElementSibling;
+			const inputDiv = button.closest('.action-buttons').parentElement.querySelector('.document-input');
             inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
         });
     });
@@ -65,14 +65,13 @@ function saveSubfolder(button, parentId) {
                             <input type="text" placeholder="Tipo documento">
                             <textarea placeholder="Sommario documento"></textarea>
                             <button type="button" class="save-document-btn">Salva</button>
-                        </div>
-                        <ul></ul>`;
+                        </div>`;
                     folderList1.appendChild(newFolder);
 
 			        const newAddSubfolderBtn = newFolder.querySelector('.add-subfolder-btn');
 			        if (newAddSubfolderBtn) {
 			            newAddSubfolderBtn.addEventListener('click', function () {
-			                const inputDiv = newAddSubfolderBtn.closest('.action-buttons').nextElementSibling;
+			                const inputDiv = newAddSubfolderBtn.closest('.action-buttons').parentElement.querySelector('.subfolder-input');
 			                inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
 			            });
 			        }
@@ -87,7 +86,7 @@ function saveSubfolder(button, parentId) {
 			        const newAddDocumentBtn = newFolder.querySelector('.add-document-btn');
 			        if (newAddDocumentBtn) {
 			            newAddDocumentBtn.addEventListener('click', function () {
-			                const inputDiv = newAddDocumentBtn.closest('.action-buttons').nextElementSibling.nextElementSibling;
+			                const inputDiv = newAddDocumentBtn.closest('.action-buttons').parentElement.querySelector('.document-input');
 			                inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
 			            });
 			        }
