@@ -29,12 +29,12 @@
                         </div>
                     </div>
                     <!-- Campo di input per il nome della nuova sottocartella -->
-                    <div class="subfolder-input" style="display:none;">
+                    <div class="subfolder-input" th:data-folder-id="${folder.getId()}" style="display:none;">
                         <input type="text" placeholder="Nome sottocartella">
                         <button type="button" class="save-subfolder-btn">Salva</button>
                     </div>
                     <!-- Campi di input per il nuovo documento -->
-                    <div class="document-input" style="display:none;">
+                    <div class="document-input" th:data-folder-id="${folder.getId()}" style="display:none;">
                         <input type="text" placeholder="Nome documento">
                         <input type="date" placeholder="Data documento">
                         <input type="text" placeholder="Tipo documento">
@@ -56,7 +56,7 @@
                         <button type="button" class="add-subfolder-btn" th:data-folder-id="${folder.getId()}">AGGIUNGI SOTTOCARTELLA</button>
                     </div>
                     <!-- Campo di input per il nome della nuova sottocartella -->
-                    <div class="subfolder-input" style="display:none;">
+                    <div class="subfolder-input" th:data-folder-id="${folder.getId()}" style="display:none;">
                         <input type="text" placeholder="Nome sottocartella">
                         <button type="button" class="save-subfolder-btn">Salva</button>
                     </div>
@@ -75,12 +75,12 @@
                                 </div>
                             </div>
                             <!-- Campo di input per il nome della nuova sottocartella -->
-                            <div class="subfolder-input" style="display:none;">
+                            <div class="subfolder-input" th:data-folder-id="${subfolder.getId()}" style="display:none;">
                                 <input type="text" placeholder="Nome sottocartella">
                                 <button type="button" class="save-subfolder-btn">Salva</button>
                             </div>
                             <!-- Campi di input per il nuovo documento -->
-                            <div class="document-input" style="display:none;">
+                            <div class="document-input" th:data-folder-id="${subfolder.getId()}" style="display:none;">
                                 <input type="text" placeholder="Nome documento">
                                 <input type="date" placeholder="Data documento">
                                 <input type="text" placeholder="Tipo documento">
@@ -117,12 +117,12 @@
                 <button type="button" class="add-document-btn" th:data-folder-id="${nestedFolder.getId()}">AGGIUNGI DOCUMENTO</button>
             </div>
             <!-- Campo di input per il nome della nuova sottocartella -->
-            <div class="subfolder-input" style="display:none;">
+            <div class="subfolder-input" th:data-folder-id="${nestedFolder.getId()}" style="display:none;">
                 <input type="text" placeholder="Nome sottocartella">
                 <button type="button" class="save-subfolder-btn">Salva</button>
             </div>
             <!-- Campi di input per il nuovo documento -->
-            <div class="document-input" style="display:none;">
+            <div class="document-input" th:data-folder-id="${nestedFolder.getId()}" style="display:none;">
                 <input type="text" placeholder="Nome documento">
                 <input type="date" placeholder="Data documento">
                 <input type="text" placeholder="Tipo documento">
@@ -149,7 +149,7 @@
                	</div>
             </div>
             <!-- Campo di input per il nome della nuova sottocartella -->
-            <div class="subfolder-input" style="display:none;">
+            <div class="subfolder-input" th:data-folder-id="${nestedFolder.getId()}" style="display:none;">
                 <input type="text" placeholder="Nome sottocartella">
                 <button type="button" class="save-subfolder-btn">Salva</button>
             </div>
