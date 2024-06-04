@@ -6,6 +6,7 @@
     <!-- Stili CSS per l'albero -->
     <link rel="stylesheet" href="css/homepage_style.css">
     <script src="js/homepage.js" defer></script>
+    
 </head>
 <body>
     <div class="header">
@@ -45,6 +46,7 @@
 	                <ul th:if="${!#lists.isEmpty(folder.getDocuments())}">
 	                    <li th:each="document : ${folder.getDocuments()}" th:data-document-id="${document.getId()}" draggable="true">
 	                        <span th:text="${document.getName()}"></span>
+	                        <a th:href="'AccessDocument?documentId=' + ${document.getId()}" th:text="accedi"></a>
 	                    </li>
 	                </ul>
                 </div>
@@ -91,6 +93,7 @@
 			                <ul th:if="${!#lists.isEmpty(subfolder.getDocuments())}">
 			                    <li th:each="document : ${subfolder.getDocuments()}" th:data-document-id="${document.getId()}" draggable="true">
 			                        <span th:text="${document.getName()}"></span>
+			                        <a th:href="'AccessDocument?documentId=' + ${document.getId()}" th:text="accedi"></a>
 			                    </li>
 			                </ul>
                             
@@ -133,6 +136,7 @@
             <ul th:if="${!#lists.isEmpty(nestedFolder.getDocuments())}">
                 <li th:each="document : ${nestedFolder.getDocuments()}" th:data-document-id="${document.getId()}" draggable="true">
                     <span th:text="${document.getName()}"></span>
+                    <a th:href="'AccessDocument?documentId=' + ${document.getId()}" th:text="accedi"></a>
                 </li>
             </ul>
         </div>

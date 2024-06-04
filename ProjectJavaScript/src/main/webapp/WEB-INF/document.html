@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento</title>
+    <link rel="stylesheet" href="css/document_style.css">
+</head>
+<body>
+    <div class="header">
+        <!-- Link per tornare alla pagina precedente -->
+		<a th:href="'Back?folderId=' + ${document.getFolder_id()} + '&amp;oldUrl=' + ${#httpServletRequest.getRequestURI()}" th:text="Back"></a>
+
+        <!-- Link per effettuare il logout -->
+        <a th:href="'Logout'">Logout</a>
+    </div>
+    
+    
+    
+    <div class="container">
+        <h1>Dettagli del Documento</h1>
+        <div class="document-info">
+            <p><strong>Nome:</strong> <span th:text="${document.getName()}"></span></p>
+            <p><strong>Autore:</strong> <span th:text="${document.getCreator()}"></span></p>
+            <p><strong>Data:</strong> <span th:text="${document.getDate()}"></span></p>
+            <p><strong>Descrizione:</strong> <span th:text="${document.getSummary()}"></span></p>
+            <p><strong>Tipo:</strong> <span th:text="${document.getType()}"></span></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -98,22 +98,12 @@ function saveSubfolder(button, parentId) {
 			            });
 			        }
 			        if (folderList.length == 0){
-				        // Rimuovi il blocco di input per il documento
-					    /*const documentInputDiv = button.closest('li').querySelector('.document-input');
-					    if (documentInputDiv) {
-					        documentInputDiv.remove();
-					    }
-	
-		                // Rimuovi il pulsante "AGGIUNGI DOCUMENTO"
-		                const addDocumentBtn = button.closest('li').querySelector('.add-document-btn');
-		                if (addDocumentBtn) {
-		                    addDocumentBtn.remove();
-	                    }*/
-	                    const folderElement = document.querySelector('li[data-folder-id="${parentId}"]');
+						
+				        // Rimuovi Aggiungi Documento			    
+	                    const folderElement = document.querySelector(`li[data-folder-id="${parentId}"]`);
 	                    const addDocumentBtn = folderElement.querySelector('.add-document-btn');
 	                    const DocumentInput = folderElement.querySelector('.document-input');
-	                    //const addDocumentBtn = document.querySelector('.add-document-btn[data-folder-id="' + parentId + '"]');
-						//const DocumentInput = document.querySelector('.document-input[data-folder-id="' + parentId + '"]');
+
 						
 						if (addDocumentBtn && DocumentInput) {
 						    addDocumentBtn.disabled = true;
@@ -178,7 +168,9 @@ function saveDocument(button, parentId) {
                     const newDocumentItem = document.createElement('li');
                     newDocumentItem.setAttribute('draggable', true);
                     newDocumentItem.setAttribute('data-document-id', data.documentId);
-                    newDocumentItem.innerHTML = `<span>${documentName}</span>`;
+                    newDocumentItem.innerHTML = `<span>${documentName}</span>
+                    	                         <a th:href="'AccessDocument?documentId=' + ${data.documentId}" th:text="accedi"></a>
+                    	                         `;
                     documentList.appendChild(newDocumentItem);
                 } else {
                     // Creare la lista ul
@@ -188,37 +180,17 @@ function saveDocument(button, parentId) {
                     const newDocument = document.createElement('li');
                     newDocument.setAttribute('draggable', true);
                     newDocument.setAttribute('data-document-id', data.documentId);
-                    newDocument.innerHTML = `<span>${documentName}</span>`;
+                    newDocument.innerHTML = `<span>${documentName}</span>
+                                        	 <a th:href="'AccessDocument?documentId=' + ${data.documentId}" th:text="accedi"></a>
+											`;
                     documentList1.appendChild(newDocument);
-                    
-                    // Rimuovi il blocco di input per la sottocartella
-                    /*const subfolderInputDiv = button.closest('li').querySelector('.subfolder-input');
-				    if (subfolderInputDiv) {
-				        subfolderInputDiv.remove();
-				    }
-	                // Rimuovi il pulsante "AGGIUNGI SOTTOCARTELLA"
-	                const addSubfolderBtn = button.closest('li').querySelector('.add-subfolder-btn');
-	                if (addSubfolderBtn) {
-	                    addSubfolderBtn.remove();
-	                }*/
-	                
-	                //Rimuovi aggiungi SottoCartella
-		            /*const targetAddSubfolderBtn = document.querySelector(`li[data-folder-id="${parentId}"] .add-subfolder-btn`);
-		            if (targetAddSubfolderBtn) {
-		                targetAddSubfolderBtn.remove();
-						                
-					    // Rimuovi la div con l'input per il nome della sottocartella e il pulsante "Salva"
-					    const inputDiv = document.querySelector(`li[data-folder-id="${parentId}"] .subfolder-input`);
-					    if (inputDiv) {
-					        inputDiv.remove();
-					    }
-					}*/
-					const folderElement = document.querySelector('li[data-folder-id="${parentId}"]');
+
+					//Rimuovi Aggiungi SottoCartella
+					const folderElement = document.querySelector(`li[data-folder-id="${parentId}"]`);
                     const addSubfolderBtn = folderElement.querySelector('.add-subfolder-btn');
                     const subfolderInput = folderElement.querySelector('.subfolder-input');
-					//const addSubfolderBtn = document.querySelector('.add-subfolder-btn[data-folder-id="' + parentId + '"]');
-					//const subfolderInput = document.querySelector('.subfolder-input[data-folder-id="' + parentId + '"]');
-					
+
+
 					if (addSubfolderBtn && subfolderInput) {
 					    addSubfolderBtn.disabled = true;
 					    subfolderInput.style.display = 'none';
@@ -284,6 +256,7 @@ function saveDocument(button, parentId) {
                 const documentElement = document.querySelector(`li[data-document-id="${documentId}"]`);
                 const oldParentElement = documentElement.parentElement;
                 const targetFolderElement = document.querySelector(`li[data-folder-id="${targetFolderId}"] ul`);
+                const targetFolderElement1 = document.querySelector(`li[data-folder-id="${targetFolderId}"]`);
 
                 // Rimuovi il documento dalla vecchia cartella
                 oldParentElement.removeChild(documentElement);
@@ -297,22 +270,9 @@ function saveDocument(button, parentId) {
                     document.querySelector(`li[data-folder-id="${targetFolderId}"]`).appendChild(newUl);
                 }
                 
-                //Rimuovi aggiungi SottoCartella
-	            /*const targetAddSubfolderBtn = document.querySelector(`li[data-folder-id="${targetFolderId}"] .add-subfolder-btn`);
-	            if (targetAddSubfolderBtn) {
-	                targetAddSubfolderBtn.remove();
-					                
-				    // Rimuovi la div con l'input per il nome della sottocartella e il pulsante "Salva"
-				    const inputDiv = document.querySelector(`li[data-folder-id="${targetFolderId}"] .subfolder-input`);
-				    if (inputDiv) {
-				        inputDiv.remove();
-				    }
-				}*/		
-					//const folderElement = document.querySelector('li[data-folder-id="${parentId}"]');
-                    const addSubfolderBtn = targetFolderElement.querySelector('.add-subfolder-btn');
-                    const subfolderInput = targetFolderElement.querySelector('.subfolder-input');
-					//const addSubfolderBtn = document.querySelector('.add-subfolder-btn[data-folder-id="' + targetFolderId + '"]');
-					//const subfolderInput = document.querySelector('.subfolder-input[data-folder-id="' + targetFolderId + '"]');
+                	//Rimuovi aggiungi SottoCartella	           
+                    const addSubfolderBtn = targetFolderElement1.querySelector('.add-subfolder-btn');
+                    const subfolderInput = targetFolderElement1.querySelector('.subfolder-input');
 					
 					if (addSubfolderBtn && subfolderInput) {
 					    addSubfolderBtn.disabled = true;
@@ -323,50 +283,12 @@ function saveDocument(button, parentId) {
 	            // Controlla se la vecchia cartella è vuota e aggiungi il pulsante "AGGIUNGI SOTTOCARTELLA" se è vuota
 	            if (oldParentElement.children.length === 0) {
 				    const oldFolderId = oldParentElement.closest('li[data-folder-id]').dataset.folderId;
-					/*const oldFolderElement = document.querySelector(`li[data-folder-id="${oldFolderId}"]`);
-
-    				const actionButtonsDiv = oldFolderElement.querySelector('.action-buttons');
-					if (actionButtonsDiv) {
-						actionButtonsDiv.innerHTML += `
-                            <button type="button" class="add-subfolder-btn" th:data-folder-id="${oldFolderId}">AGGIUNGI SOTTOCARTELLA</button>
-                        `;
-				        const addSubfolderBtn = document.createElement('button');
-				        addSubfolderBtn.type = 'button';
-				        addSubfolderBtn.classList.add('add-subfolder-btn');
-				        addSubfolderBtn.setAttribute('data-folder-id', oldFolderId);
-				        addSubfolderBtn.textContent = 'AGGIUNGI SOTTOCARTELLA';
-				
-				        const subfolderInputDiv = document.createElement('div');
-				        subfolderInputDiv.classList.add('subfolder-input');
-				        subfolderInputDiv.style.display = 'none';
-				        subfolderInputDiv.innerHTML = `
-				            <input type="text" placeholder="Nome sottocartella">
-				            <button type="button" class="save-subfolder-btn">Salva</button>
-				        `;
-				
-				        //actionButtonsDiv.appendChild(addSubfolderBtn);
-				        oldFolderElement.appendChild(subfolderInputDiv);
-				
-				        // Aggiungi event listener al nuovo pulsante "AGGIUNGI SOTTOCARTELLA"
-				        const addSubfolderBtn = oldFolderElement.querySelector('.add-subfolder-btn');
-				        addSubfolderBtn.addEventListener('click', function () {
-				            const inputDiv = oldFolderElement.querySelector('.subfolder-input');
-				            inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
-				        });
-	
-				        // Aggiungi event listener al pulsante "SALVA SOTTOCARTELLA"
-				        const saveSubfolderBtn = subfolderInputDiv.querySelector('.save-subfolder-btn');
-				        if (saveSubfolderBtn){
-					        saveSubfolderBtn.addEventListener('click', function () {
-					            saveSubfolder(saveSubfolderBtn, oldFolderId);
-					        });
-				        }
-			        }*/
-			        const folderElement = document.querySelector('li[data-folder-id="${oldFolderId}"]');
+					
+					//Attiva Aggiungi SottoCartella
+			        const folderElement = document.querySelector(`li[data-folder-id="${oldFolderId}"]`);
                     const addSubfolderBtn = folderElement.querySelector('.add-subfolder-btn');
                     const subfolderInput = folderElement.querySelector('.subfolder-input');
-			        //const addSubfolderBtn = document.querySelector('.add-subfolder-btn[data-folder-id="' + oldFolderId + '"]');
-					//const subfolderInput = document.querySelector('.subfolder-input[data-folder-id="' + oldFolderId + '"]');
+
 					
 					if (addSubfolderBtn && subfolderInput) {
 					    addSubfolderBtn.disabled = false;
