@@ -164,20 +164,25 @@ function saveDocument(button, parentId) {
             if (data.status === 'success') {
                 // Aggiorna dinamicamente il DOM con il nuovo documento
                 const documentList = button.closest('li').querySelector('ul');
-
-                // Creare la lista ul
-                const documentList1 = document.createElement('ul');
-                // Aggiungere la lista al parente appropriato
-                button.closest('li').appendChild(documentList1);
-                const newDocument = document.createElement('li');
-                newDocument.setAttribute('draggable', true);
-                newDocument.innerHTML = `<span>${documentName}</span>`;
-                documentList1.appendChild(newDocument);
-                
-
-				// Rimuovi il blocco di input per la sottocartella
-				if (!documentList){
-				    const subfolderInputDiv = button.closest('li').querySelector('.subfolder-input');
+                if (documentList) {
+                    const newDocumentItem = document.createElement('li');
+                    newDocumentItem.setAttribute('draggable', true);
+                    newDocumentItem.setAttribute('data-document-id', data.documentId);
+                    newDocumentItem.innerHTML = `<span>${documentName}</span>`;
+                    documentList.appendChild(newDocumentItem);
+                } else {
+                    // Creare la lista ul
+                    const documentList1 = document.createElement('ul');
+                    // Aggiungere la lista al parente appropriato
+                    button.closest('li').appendChild(documentList1);
+                    const newDocument = document.createElement('li');
+                    newDocument.setAttribute('draggable', true);
+                    newDocument.setAttribute('data-document-id', data.documentId);
+                    newDocument.innerHTML = `<span>${documentName}</span>`;
+                    documentList1.appendChild(newDocument);
+                    
+                    // Rimuovi il blocco di input per la sottocartella
+                    const subfolderInputDiv = button.closest('li').querySelector('.subfolder-input');
 				    if (subfolderInputDiv) {
 				        subfolderInputDiv.remove();
 				    }
@@ -186,7 +191,8 @@ function saveDocument(button, parentId) {
 	                if (addSubfolderBtn) {
 	                    addSubfolderBtn.remove();
 	                }
-                }				
+                }
+                			
 				
 
                 // Resetta i campi di input
@@ -297,15 +303,17 @@ function saveDocument(button, parentId) {
 			
 			        // Aggiungi event listener al nuovo pulsante "AGGIUNGI SOTTOCARTELLA"
 			        addSubfolderBtn.addEventListener('click', function () {
-			            const inputDiv = addSubfolderBtn.closest('.action-buttons').nextElementSibling;
+			            const inputDiv = oldFolderElement.querySelector('.subfolder-input');
 			            inputDiv.style.display = inputDiv.style.display === 'none' ? 'block' : 'none';
 			        });
-			
+
 			        // Aggiungi event listener al pulsante "SALVA SOTTOCARTELLA"
 			        const saveSubfolderBtn = subfolderInputDiv.querySelector('.save-subfolder-btn');
-			        saveSubfolderBtn.addEventListener('click', function () {
-			            saveSubfolder(this, oldFolderId);
-			        });
+			        if (saveSubfolderBtn){
+				        saveSubfolderBtn.addEventListener('click', function () {
+				            saveSubfolder(saveSubfolderBtn, oldFolderId);
+				        });
+			        }
 		        }
             }
     	                

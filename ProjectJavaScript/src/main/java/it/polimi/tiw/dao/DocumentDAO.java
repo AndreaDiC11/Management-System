@@ -12,12 +12,12 @@ public class DocumentDAO {
     public DocumentDAO(Connection connection) {
         this.connection = connection;
     }
-    public boolean documentExists(int folderId, String documentName) throws SQLException {
-        String query = "SELECT COUNT(*) FROM documents WHERE folder_id = ? AND name = ?";
+    public boolean documentExists(String creator, String documentName) throws SQLException {
+        String query = "SELECT COUNT(*) FROM documents WHERE creator = ? AND name = ?";
         boolean exists = false;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, folderId);
+            statement.setString(1, creator);
             statement.setString(2, documentName);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -33,7 +33,7 @@ public class DocumentDAO {
 
     
     public void newDocument(String creator, int folderId, String documentName, String documentDate, String documentType, String documentSummary) throws SQLException {
-        if (documentExists(folderId, documentName)) {
+        if (documentExists(creator, documentName)) {
             throw new SQLException("Document already exists for user: " + creator + ", document name: " + documentName);
         }
         String query = "INSERT INTO documents (folder_id, creator, name, date, summary, type) VALUES (?, ?, ?, ?, ?, ?)";
