@@ -58,6 +58,10 @@ public class FolderDAO {
         if (folderExists(username, folderName)) {
             throw new SQLException("Folder already exists for user: " + username + ", folder name: " + folderName);
         }
+        DocumentDAO documentDao = new DocumentDAO(connection);
+        if (documentDao.documentExists(username, folderName)) {
+        	throw new SQLException("Document with same name");
+        }
         String query = "INSERT INTO folders (creator, name, parent_id) VALUES (?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -225,6 +229,39 @@ public class FolderDAO {
         }
 
         return folder;
+    }
+    
+    public void deleteFolder(int folderId) throws SQLException {
+        // Elimina tutti i documenti nella cartella
+        deleteDocumentsInFolder(folderId);
+
+        // Elimina tutte le sottocartelle ricorsivamente
+        deleteSubfolders(folderId);
+
+        // Elimina la cartella stessa
+        String deleteFolderQuery = "DELETE FROM folders WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteFolderQuery)) {
+            statement.setInt(1, folderId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteDocumentsInFolder(int folderId) throws SQLException {
+        String deleteDocumentsQuery = "DELETE FROM documents WHERE folder_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteDocumentsQuery)) {
+            statement.setInt(1, folderId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void deleteSubfolders(int parentId) throws SQLException {
+        // Ottieni tutte le sottocartelle della cartella corrente
+        List<Folder> subfolders = findSubfolders(parentId);
+
+        // Elimina ricorsivamente ciascuna sottocartella
+        for (Folder subfolder : subfolders) {
+            deleteFolder(subfolder.getId());
+        }
     }
 
 }

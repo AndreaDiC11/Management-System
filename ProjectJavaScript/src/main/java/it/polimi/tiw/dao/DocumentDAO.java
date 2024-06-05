@@ -31,10 +31,32 @@ public class DocumentDAO {
         return exists;
     }
 
+    public boolean folderExistsWithSameName(String creator, String documentName) throws SQLException {
+        String query = "SELECT COUNT(*) FROM folders WHERE creator = ? AND name = ?";
+        boolean exists = false;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, creator);
+            statement.setString(2, documentName);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    exists = (count > 0);
+                }
+            }
+        }
+
+        return exists;
+    }
+
     
     public void newDocument(String creator, int folderId, String documentName, String documentDate, String documentType, String documentSummary) throws SQLException {
         if (documentExists(creator, documentName)) {
             throw new SQLException("Document already exists for user: " + creator + ", document name: " + documentName);
+        }
+        if (folderExistsWithSameName(creator, documentName)) {
+            throw new SQLException("Folder with same name");
         }
         String query = "INSERT INTO documents (folder_id, creator, name, date, summary, type) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -107,5 +129,14 @@ public class DocumentDAO {
         }
 
         return document;
+    }
+    
+    // Metodo per eliminare un documento
+    public void deleteDocument(int documentId) throws SQLException {
+        String deleteQuery = "DELETE FROM documents WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
+            statement.setInt(1, documentId);
+            statement.executeUpdate();
+        }
     }
 }

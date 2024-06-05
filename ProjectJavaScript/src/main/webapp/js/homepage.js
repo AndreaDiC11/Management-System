@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const addSubfolderButtons = document.querySelectorAll('.add-subfolder-btn');
     const addDocumentButtons = document.querySelectorAll('.add-document-btn');
+    
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
     addSubfolderButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -47,8 +51,11 @@ function saveSubfolder(button, parentId) {
                     button.closest('li').appendChild(folderList1);
                     const newFolder = document.createElement('li');
                     newFolder.setAttribute('data-folder-id', data.folderId); // Aggiungi th:data-folder-id
+                    newFolder.setAttribute('data-folder-name', saveSubfolder);
                     newFolder.setAttribute('ondrop', 'handleDrop(event)'); // Aggiungi ondrop
                     newFolder.setAttribute('ondragover', 'handleDragOver(event)'); // Aggiungi ondragover
+                    newFolder.setAttribute('draggable', true);
+                    newFolder.setAttribute('dragstart', 'handleDragStart(event)'); 
                     newFolder.innerHTML = `
                         <span>${subfolderName}</span>
                         <div class="action-buttons">
@@ -167,6 +174,7 @@ function saveDocument(button, parentId) {
                 if (documentList) {
                     const newDocumentItem = document.createElement('li');
                     newDocumentItem.setAttribute('draggable', true);
+                    newDocumentItem.setAttribute('dragstart', 'handleDragStart(event)'); 
                     newDocumentItem.setAttribute('data-document-id', data.documentId);
                     newDocumentItem.innerHTML = `<span>${documentName}</span>`;
                     
@@ -183,6 +191,7 @@ function saveDocument(button, parentId) {
                     button.closest('li').appendChild(documentList1);
                     const newDocument = document.createElement('li');
                     newDocument.setAttribute('draggable', true);
+                    newDocument.setAttribute('dragstart', 'handleDragStart(event)'); 
                     newDocument.setAttribute('data-document-id', data.documentId);
                     newDocument.innerHTML = `<span>${documentName}</span>`;
                     
@@ -238,7 +247,8 @@ function saveDocument(button, parentId) {
 	});
 	
 	function handleDragStart(event) {
-        event.dataTransfer.setData('text/plain', event.target.dataset.documentId);
+        event.dataTransfer.setData('text/plain/documentId', event.target.dataset.documentId);
+        event.dataTransfer.setData('text/plain/folderId', event.target.dataset.folderId);
         event.dataTransfer.effectAllowed = 'move';
     }
 
@@ -249,9 +259,29 @@ function saveDocument(button, parentId) {
 
     function handleDrop(event) {
         event.preventDefault();
-        const documentId = event.dataTransfer.getData('text/plain');
+ 
+        const folderId = event.dataTransfer.getData('text/plain/folderId');
+        const documentId = event.dataTransfer.getData('text/plain/documentId');
         const targetFolderId = event.target.closest('li[data-folder-id]').dataset.folderId;
+        const targetFolderName = event.target.closest('li[data-folder-id]').dataset.folderName;
+        
+        if (targetFolderName === "Cestino"){		
+			confirmModal.style.display = 'block';
+		    confirmDeleteBtn.addEventListener('click', function () {
+				deleteElement(documentId, folderId);
+			});
+		}
+		else {
+			if (documentId){
+				moveDocument(documentId, targetFolderId);
+			}
+		}
+        
+        
+    }
 
+
+	function moveDocument(documentId, targetFolderId){
         fetch('SpostaDocumento', {
             method: 'POST',
             headers: {
@@ -316,6 +346,41 @@ function saveDocument(button, parentId) {
             alert('Errore nello spostamento del documento');
         });
     }
+    
+    function deleteElement(documentId, folderId){
+		fetch('EliminaElemento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `documentId=${documentId}&folderId=${folderId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    if (documentId) {
+						const documentElement = document.querySelector(`li[data-document-id="${documentId}"]`);
+						if (documentElement){
+                        	documentElement.parentElement.removeChild(documentElement);
+                    	}
+                    } else {
+                        const folderElement = document.querySelector(`li[data-folder-id="${folderId}"]`);
+                        if (folderElement) {
+                            folderElement.parentElement.removeChild(folderElement);
+                        }
+                    }
+                } else {
+                    alert('Errore nella cancellazione dell\'elemento');
+                }
+                confirmModal.style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+                alert('Errore nella cancellazione dell\'elemento');
+                confirmModal.style.display = 'none';
+            });
+        }
+
 
     function addDragAndDropListeners() {
         const documentItems = document.querySelectorAll('li[data-document-id]');
@@ -327,10 +392,18 @@ function saveDocument(button, parentId) {
         });
 
         folderItems.forEach(item => {
-            item.addEventListener('dragover', handleDragOver);
-            item.addEventListener('drop', handleDrop);
+            item.setAttribute('draggable', true); // Imposta anche gli elementi di cartella come trascinabili
+	        item.addEventListener('dragstart', handleDragStart); // Aggiungi l'evento dragstart
+	        item.addEventListener('dragover', handleDragOver);
+	        item.addEventListener('drop', handleDrop);
+            
         });
     }
+    
+    cancelDeleteBtn.addEventListener('click', function () {
+        confirmModal.style.display = 'none';
+        itemToDelete = null;
+    });
 
     // Chiamata per aggiungere gli event listeners per la prima volta
     addDragAndDropListeners();
