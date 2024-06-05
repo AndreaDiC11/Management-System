@@ -168,9 +168,13 @@ function saveDocument(button, parentId) {
                     const newDocumentItem = document.createElement('li');
                     newDocumentItem.setAttribute('draggable', true);
                     newDocumentItem.setAttribute('data-document-id', data.documentId);
-                    newDocumentItem.innerHTML = `<span>${documentName}</span>
-                    	                         <a th:href="'AccessDocument?documentId=' + ${data.documentId}" th:text="accedi"></a>
-                    	                         `;
+                    newDocumentItem.innerHTML = `<span>${documentName}</span>`;
+                    
+                    const anchor = document.createElement('a');
+                    anchor.href = `AccessDocument?documentId=${data.documentId}`;
+                    anchor.textContent = 'accedi';
+                    newDocumentItem.appendChild(anchor);
+                    
                     documentList.appendChild(newDocumentItem);
                 } else {
                     // Creare la lista ul
@@ -180,23 +184,28 @@ function saveDocument(button, parentId) {
                     const newDocument = document.createElement('li');
                     newDocument.setAttribute('draggable', true);
                     newDocument.setAttribute('data-document-id', data.documentId);
-                    newDocument.innerHTML = `<span>${documentName}</span>
-                                        	 <a th:href="'AccessDocument?documentId=' + ${data.documentId}" th:text="accedi"></a>
-											`;
+                    newDocument.innerHTML = `<span>${documentName}</span>`;
+                    
+                    const anchor = document.createElement('a');
+                    anchor.href = `AccessDocument?documentId=${data.documentId}`;
+                    anchor.textContent = ' accedi';
+                    newDocument.appendChild(anchor);
+                    
                     documentList1.appendChild(newDocument);
 
-					//Rimuovi Aggiungi SottoCartella
-					const folderElement = document.querySelector(`li[data-folder-id="${parentId}"]`);
-                    const addSubfolderBtn = folderElement.querySelector('.add-subfolder-btn');
-                    const subfolderInput = folderElement.querySelector('.subfolder-input');
-
-
-					if (addSubfolderBtn && subfolderInput) {
-					    addSubfolderBtn.disabled = true;
-					    subfolderInput.style.display = 'none';
-					}
 					
                 }
+                
+            	//Rimuovi Aggiungi SottoCartella
+				const folderElement = document.querySelector(`li[data-folder-id="${parentId}"]`);
+                const addSubfolderBtn = folderElement.querySelector('.add-subfolder-btn');
+                const subfolderInput = folderElement.querySelector('.subfolder-input');
+
+
+				if (addSubfolderBtn && subfolderInput) {
+				    addSubfolderBtn.disabled = true;
+				    subfolderInput.style.display = 'none';
+					}
                 			
 				
 
