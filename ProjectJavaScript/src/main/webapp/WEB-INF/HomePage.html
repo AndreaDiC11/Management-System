@@ -15,6 +15,13 @@
         <!-- Link per effettuare il logout -->
         <a th:href="'Logout'">Logout</a>
     </div>
+   	<div class="confirmModal" style="display:none;">
+	    <div class="modal-content">
+	        <p>Sei sicuro di voler eliminare questo elemento?</p>
+	        <button class="confirmDeleteBtn">Conferma</button>
+	        <button class="cancelDeleteBtn">Annulla</button>
+	    </div>
+	</div>
     <div id="tree">
         <ul>
             <!-- Iterazione sulle cartelle -->
@@ -170,15 +177,6 @@
                 <li th:each="nestedFolder : ${nestedFolder.getFolders()}" th:data-folder-id="${nestedFolder.getId()}" th:data-folder-name="${nestedFolder.getName()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" draggable="true" ondragstart="handleDragStart(event)" th:include="this :: folderFragment"></li>
             </ul>
         </div>
-    </div>
-    
-    <div id="confirmModal" style="display:none;">
-	    <div class="modal-content">
-	        <p>Sei sicuro di voler eliminare questo elemento?</p>
-	        <button id="confirmDeleteBtn">Conferma</button>
-	        <button id="cancelDeleteBtn">Annulla</button>
-	    </div>
-	</div>
-    
+    </div>    
 </body>
 </html>

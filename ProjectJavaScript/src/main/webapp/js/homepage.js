@@ -2,9 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const addSubfolderButtons = document.querySelectorAll('.add-subfolder-btn');
     const addDocumentButtons = document.querySelectorAll('.add-document-btn');
     
-    const confirmModal = document.getElementById('confirmModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+	const confirmModal = document.querySelector('.confirmModal');
+	const confirmDeleteBtn = document.querySelector('.confirmDeleteBtn');
+	const cancelDeleteBtn = document.querySelector('.cancelDeleteBtn');
+
 
     addSubfolderButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -361,8 +362,25 @@ function saveDocument(button, parentId) {
                     if (documentId) {
 						const documentElement = document.querySelector(`li[data-document-id="${documentId}"]`);
 						if (documentElement){
-                        	documentElement.parentElement.removeChild(documentElement);
-                    	}
+							const oldParentElement = documentElement.parentElement
+                        	oldParentElement.removeChild(documentElement);
+        		            // Controlla se la vecchia cartella è vuota e aggiungi il pulsante "AGGIUNGI SOTTOCARTELLA" se è vuota
+				            if (oldParentElement.children.length === 0) {
+							    const oldFolderId = oldParentElement.closest('li[data-folder-id]').dataset.folderId;
+								
+								//Attiva Aggiungi SottoCartella
+						        const folderElement = document.querySelector(`li[data-folder-id="${oldFolderId}"]`);
+			                    const addSubfolderBtn = folderElement.querySelector('.add-subfolder-btn');
+			                    const subfolderInput = folderElement.querySelector('.subfolder-input');
+			
+								
+								if (addSubfolderBtn && subfolderInput) {
+								    addSubfolderBtn.disabled = false;
+								    subfolderInput.style.display = 'block';
+								}
+						        
+			            	}
+                    	}              	
                     } else {
                         const folderElement = document.querySelector(`li[data-folder-id="${folderId}"]`);
                         if (folderElement) {

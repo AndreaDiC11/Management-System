@@ -57,7 +57,7 @@ public class EliminaElemento extends HttpServlet {
         FolderDAO folderDao = new FolderDAO(connection);
 
         try {
-            if (documentIdStr != null) {
+            if (documentIdStr != null && !"undefined".equals(documentIdStr)) {
             	int documentId = Integer.parseInt(documentIdStr);
             	
 	            if (documentDao.findDocumentById(documentId) != null) {
