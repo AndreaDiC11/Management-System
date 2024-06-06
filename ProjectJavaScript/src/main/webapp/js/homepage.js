@@ -359,7 +359,7 @@ function saveDocument(button, parentId) {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    if (documentId) {
+                    if (documentId !== "undefined") {
 						const documentElement = document.querySelector(`li[data-document-id="${documentId}"]`);
 						if (documentElement){
 							const oldParentElement = documentElement.parentElement
@@ -384,9 +384,26 @@ function saveDocument(button, parentId) {
                     } else {
                         const folderElement = document.querySelector(`li[data-folder-id="${folderId}"]`);
                         if (folderElement) {
-                            folderElement.parentElement.removeChild(folderElement);
-                        }
-                    }
+							const oldParentElement = folderElement.parentElement
+                            //oldParentElement.removeChild(folderElement);
+                            removeFolderAndChildren(folderElement);
+        		            // Controlla se la vecchia cartella è vuota e aggiungi il pulsante "AGGIUNGI DOCUMENTO" se è vuota
+				            if (oldParentElement.children.length === 0) {
+							    const oldFolderId = oldParentElement.closest('li[data-folder-id]').dataset.folderId;
+								
+								//Attiva Aggiungi Documento
+						        const folderElement = document.querySelector(`li[data-folder-id="${oldFolderId}"]`);
+			                    const addDocumentBtn = folderElement.querySelector('.add-document-btn');
+			                    const documentInput = folderElement.querySelector('.document-input');
+		
+								
+								if (addDocumentBtn && documentInput) {
+								    addDocumentBtn.disabled = false;
+								    documentInput.style.display = 'block';
+								}
+                        	}
+                    	}
+                	}
                 } else {
                     alert('Errore nella cancellazione dell\'elemento');
                 }
@@ -417,6 +434,20 @@ function saveDocument(button, parentId) {
             
         });
     }
+    
+    // Funzione ricorsiva per rimuovere una cartella e tutti i suoi figli
+	function removeFolderAndChildren(elementDelete) {
+	    const children = elementDelete.querySelectorAll(':scope *');
+	    
+	    // Rimuovi tutte le sotto-cartelle ricorsivamente
+	    children.forEach(child => {
+	        removeFolderAndChildren(child);
+	    });
+	
+	    // Rimuovi la cartella corrente
+	    const parentElement = elementDelete.parentElement;
+	    parentElement.removeChild(elementDelete);
+	}
     
     cancelDeleteBtn.addEventListener('click', function () {
         confirmModal.style.display = 'none';
