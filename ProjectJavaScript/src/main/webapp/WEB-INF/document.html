@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documento</title>
     <link rel="stylesheet" href="css/document_style.css">
+    <script src="js/back.js" defer></script>
+    
 </head>
 <body>
     <div class="header">
         <!-- Link per tornare alla pagina precedente -->
-		<a th:href="'Back?folderId=' + ${document.getFolder_id()} + '&amp;oldUrl=' + ${#httpServletRequest.getRequestURI()}" th:text="Back"></a>
-
+ 		<button id="backButton">Back</button>
+ 		
         <!-- Link per effettuare il logout -->
         <a th:href="'Logout'">Logout</a>
     </div>

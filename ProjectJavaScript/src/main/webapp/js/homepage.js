@@ -117,7 +117,6 @@ function saveSubfolder(button, parentId) {
 					    DocumentInput.style.display = 'none';
 					}
                 } else {
-					// Se non c'è una lista, crea una nuova
                     //const folderList = document.createElement('ul');
                     //button.closest('li').appendChild(folderList1);
                     const newFolder = document.createElement('li');
@@ -144,8 +143,10 @@ function saveSubfolder(button, parentId) {
                             <textarea placeholder="Sommario documento"></textarea>
                             <button type="button" class="save-document-btn">Salva</button>
                         </div>`;
-                    let ulElement = folderElement.querySelector('ul');
-                    ulElement.appendChild(newFolder);
+                    //let ulElement = folderElement.querySelectorAll('ul');
+                    //ulElement.appendChild(newFolder);
+                    button.closest('li').querySelector('ul').appendChild(newFolder);
+
                     
                     const newAddSubfolderBtn = newFolder.querySelector('.add-subfolder-btn');
 			        if (newAddSubfolderBtn) {
@@ -311,6 +312,7 @@ function saveDocument(button, parentId) {
 	function handleDragStart(event) {
         event.dataTransfer.setData('text/plain/documentId', event.target.dataset.documentId);
         event.dataTransfer.setData('text/plain/folderId', event.target.dataset.folderId);
+        event.dataTransfer.setData('text/plain/folderName', event.target.dataset.folderName);
         event.dataTransfer.effectAllowed = 'move';
     }
 
@@ -323,20 +325,25 @@ function saveDocument(button, parentId) {
         event.preventDefault();
  
         const folderId = event.dataTransfer.getData('text/plain/folderId');
+        const folderName = event.dataTransfer.getData('text/plain/folderName');
         const documentId = event.dataTransfer.getData('text/plain/documentId');
         const targetFolderId = event.target.closest('li[data-folder-id]').dataset.folderId;
         const targetFolderName = event.target.closest('li[data-folder-id]').dataset.folderName;
         
-        if (targetFolderName === "Cestino"){		
-			confirmModal.style.display = 'block';
-		    confirmDeleteBtn.addEventListener('click', function () {
-				deleteElement(documentId, folderId);
-			});
-		}
-		else {
-			if (documentId){
-				moveDocument(documentId, targetFolderId);
+        if (folderName !=="Cestino" && folderName !=="Cartella"){
+	        if (targetFolderName === "Cestino"){		
+				confirmModal.style.display = 'block';
+			    confirmDeleteBtn.addEventListener('click', function () {
+					deleteElement(documentId, folderId);
+				});
 			}
+			else {
+				if (documentId){
+					moveDocument(documentId, targetFolderId);
+				}
+			}
+		} else {
+			alert("Non puoi spostare questo file");
 		}
         
         
@@ -447,9 +454,12 @@ function saveDocument(button, parentId) {
                         if (folderElement) {
 							const oldParentElement = folderElement.parentElement;
                             oldParentElement.removeChild(folderElement);
+                            
+                            const oldFolderId = oldParentElement.closest('li[data-folder-id]').dataset.folderId;
+                            const oldParentFolder = document.querySelector(`li[data-folder-id="${oldFolderId}"]`);
+                            const figli = oldParentFolder.querySelectorAll('li[data-folder-id]');
         		            // Controlla se la vecchia cartella è vuota e aggiungi il pulsante "AGGIUNGI DOCUMENTO" se è vuota
-				            if (oldParentElement.children.length === 0) {
-							    const oldFolderId = oldParentElement.closest('li[data-folder-id]').dataset.folderId;
+				            if (figli.length === 0) {
 								
 								//Attiva Aggiungi Documento
 						        const ParentElement = document.querySelector(`li[data-folder-id="${oldFolderId}"]`);

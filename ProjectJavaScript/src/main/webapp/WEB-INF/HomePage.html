@@ -25,7 +25,7 @@
     <div id="tree">
         <ul>
             <!-- Iterazione sulle cartelle -->
-            <li th:each="folder : ${folders}" th:data-folder-id="${folder.getId()}" th:data-folder-name="${folder.getName()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" draggable="true" ondragstart="handleDragStart(event)">
+            <li th:each="folder : ${folders}" th:data-folder-id="${folder.getId()}" th:data-folder-name="${folder.getName()}"  ondrop="handleDrop(event)" ondragover="handleDragOver(event)" draggable="true" ondragstart="handleDragStart(event)">
                 <div th:if="${#lists.isEmpty(folder.getFolders())}">
                     <!-- Se non ci sono sottocartelle, mostra un link per visualizzare i documenti -->
                     <span th:text="${folder.getName()}"></span>
