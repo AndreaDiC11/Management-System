@@ -48,7 +48,7 @@ public class UserDAO {
 
             insertTrashFolderStatement.executeUpdate();
             
-            // Inserisce la cartella "Cestino" associata all'utente nel database
+            // Inserisce la cartella "Cartella" associata all'utente nel database
             PreparedStatement insertTopFolderStatement = connection.prepareStatement(INSERT_TOP_FOLDER_SQL);
             insertTopFolderStatement.setString(1, user.getUsername());
             insertTopFolderStatement.setString(2, "Cartella");

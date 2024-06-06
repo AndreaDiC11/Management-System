@@ -27,7 +27,7 @@
             <!-- Iterazione sulle cartelle -->
             <li th:each="folder : ${folders}" th:data-folder-id="${folder.getId()}" th:data-folder-name="${folder.getName()}"  ondrop="handleDrop(event)" ondragover="handleDragOver(event)" draggable="true" ondragstart="handleDragStart(event)">
                 <div th:if="${#lists.isEmpty(folder.getFolders())}">
-                    <!-- Se non ci sono sottocartelle, mostra un link per visualizzare i documenti -->
+                    <!-- Se non ci sono sottocartelle, mostra il bottone aggiungi documento anche se non è piu necessario perchè gestito sotto-->
                     <span th:text="${folder.getName()}"></span>
                     <!-- Contenitore per i pulsanti e i form -->
                     <div class="action-buttons">
@@ -81,7 +81,7 @@
                     </div>
                     <!-- Iterazione sulle sotto-cartelle -->
                     <ul>
-                        <li th:each="subfolder : ${folder.getFolders()}" th:data-folder-id="${subfolder.getId()}" th:data-folder-name="${subfolder.getName()}"ondrop="handleDrop(event)" ondragover="handleDragOver(event)" draggable="true" ondragstart="handleDragStart(event)"> 
+                        <li th:each="subfolder : ${folder.getFolders()}" th:data-folder-id="${subfolder.getId()}" th:data-folder-name="${subfolder.getName()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" draggable="true" ondragstart="handleDragStart(event)"> 
                             <!-- Mostra i nomi delle sotto-cartelle -->
                             <span th:text="${subfolder.getName()}"></span>
                             <!-- Contenitore per i pulsanti e i form -->
@@ -173,7 +173,7 @@
                 <button type="button" class="save-document-btn">Salva</button>
             </div>
             <!-- Iterazione sulle sotto-cartelle -->
-            <ul>
+            <ul th:if="${!#lists.isEmpty(nestedFolder.getFolders())}">      
                 <li th:each="nestedFolder : ${nestedFolder.getFolders()}" th:data-folder-id="${nestedFolder.getId()}" th:data-folder-name="${nestedFolder.getName()}" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" draggable="true" ondragstart="handleDragStart(event)" th:include="this :: folderFragment"></li>
             </ul>
         </div>
