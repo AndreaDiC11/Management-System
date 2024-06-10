@@ -106,7 +106,7 @@ function saveSubfolder(button, parentId) {
 			                saveDocument(newSaveDocumentBtn, data.folderId);
 			            });
 			        }						
-				        // Rimuovi Aggiungi Documento			    
+				    // Rimuovi Aggiungi Documento			    
                     const folderElement = document.querySelector(`li[data-folder-id="${parentId}"]`);
                     const addDocumentBtn = folderElement.querySelector('.add-document-btn');
                     const DocumentInput = folderElement.querySelector('.document-input');
@@ -117,8 +117,6 @@ function saveSubfolder(button, parentId) {
 					    DocumentInput.style.display = 'none';
 					}
                 } else {
-                    //const folderList = document.createElement('ul');
-                    //button.closest('li').appendChild(folderList1);
                     const newFolder = document.createElement('li');
                     newFolder.setAttribute('data-folder-id', data.folderId); // Aggiungi th:data-folder-id
                     newFolder.setAttribute('data-folder-name', saveSubfolder);
@@ -143,8 +141,6 @@ function saveSubfolder(button, parentId) {
                             <textarea placeholder="Sommario documento"></textarea>
                             <button type="button" class="save-document-btn">Salva</button>
                         </div>`;
-                    //let ulElement = folderElement.querySelectorAll('ul');
-                    //ulElement.appendChild(newFolder);
                     button.closest('li').querySelector('ul').appendChild(newFolder);
 
                     
