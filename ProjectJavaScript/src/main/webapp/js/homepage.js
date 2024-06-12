@@ -187,7 +187,7 @@ function saveSubfolder(button, parentId) {
 	        })
 	        .catch(error => {
 	            console.error('Errore:', error);
-	            alert(error.message);
+	            alert("Si è verificato un errore");
 		        });
 	    } else {
 	        alert('Inserisci un nome per la sottocartella');
@@ -291,7 +291,7 @@ function saveDocument(button, parentId) {
         })
         .catch(error => {
             console.error('Errore:', error);
-            alert(error.message);
+            alert("Si è verificato un errore");
         });
     } else {
         alert('Compila tutti i campi per il documento');

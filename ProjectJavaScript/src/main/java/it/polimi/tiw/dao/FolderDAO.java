@@ -82,6 +82,11 @@ public class FolderDAO {
         if (folderExists(creator, newFolderName)) {
             throw new SQLException("Folder already exists for user: " + creator + ", folder name: " + newFolderName);
         }
+        DocumentDAO documentDao = new DocumentDAO(connection);
+        if (documentDao.documentExists(creator, newFolderName)) {
+        	throw new SQLException("Document with same name");
+        }
+        
 
         // Inserisci la nuova cartella come sottocartella
         String query = "INSERT INTO folders (name, parent_id, creator) VALUES (?, ?, ?)";
